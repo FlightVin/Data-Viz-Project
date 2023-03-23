@@ -1,7 +1,11 @@
 # Data-Viz-Project
 
-Dataset credits:
+## Data from https://public.emdat.be/data
+
 ```
+Dataset credits:
+For folders in archive/
+
 The GDIS data descriptor
 Rosvold, E.L., Buhaug, H. GDIS, a global dataset of geocoded disaster locations. Sci Data 8,
 61 (2021). https://doi.org/10.1038/s41597-021-00846-6
