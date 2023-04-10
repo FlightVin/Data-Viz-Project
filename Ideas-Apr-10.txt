@@ -1,0 +1,11 @@
+1. The geographical distribution of the various disasters and linking this to the conclusion of regions more susceptible to calamities. - globe with zoom, aggregate slider for year and selection of calamities
+
+2. Relation between the adverse affects of disasters such as number of causalities, degree of homelessness and so on, with the magnitude of damage - human impact, economic imapct -> disaster magnitude value
+	Use https://d3-graph-gallery.com/spider.html -> select disaster and and colour according to magnitude ranges and use average values for impact within that range
+	
+3. Relation between the plea for international aid and the year of the disaster to measure geopolitics
+	Appeal for aid, how much aid was given - relate this to year and measure geopolitics
+	First - select year and show countries that said yes and what said no - https://d3-graph-gallery.com/wordcloud.html
+	Click yes, show https://d3-graph-gallery.com/circularpacking.html - size determined by aid received
+	
+4. The relation between associated disasters to further understand how a calamity can trigger other calamities as well. - https://observablehq.com/@d3/parallel-sets - use associated disasters
