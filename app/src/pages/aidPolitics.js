@@ -5,6 +5,7 @@ import './aidPolitics.css'
 import Box from '@mui/material/Box';
 import Loading from './loading.js';
 import Button from '@mui/material/Button';
+import { useNavigate } from "react-router-dom";
 const cloud = require("d3-cloud");
 
 const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
@@ -13,6 +14,13 @@ export default function AidPolitics(props) {
     const [data, setData] = React.useState(null);
     const [isLoading, setLoading] = React.useState(true);
     const [changeState, setChangeState] = React.useState(true);
+    const navigate = useNavigate();
+
+    const navigateTo = (route) => {
+        return function() {
+            navigate(route+"/"+yearRange[0]+"/"+yearRange[1]);
+        }
+    }
 
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
     width = 400 - margin.left - margin.right,
@@ -36,7 +44,6 @@ export default function AidPolitics(props) {
             noSvg.selectAll('*').remove();
 
             const checkDate = (d) => {
-                console.log(Number(d['Start Year']));
                 return Number(d['Start Year']) >= yearRange[0] && Number(d['Start Year']) <= yearRange[1];
             }
 
@@ -99,7 +106,7 @@ export default function AidPolitics(props) {
         }
 
         if (!isLoading) drawAidPolitics();
-    }, [changeState]);
+    }, [changeState, isLoading]);
 
 
     if (isLoading) {
@@ -157,7 +164,7 @@ export default function AidPolitics(props) {
                 </p>
 
                 <div className="visual-div">
-                    <div id="yes-div" className="svg-div">
+                    <div id="yes-div" className="svg-div" onClick={navigateTo('/aid-politics-yes')}>
                         <p>Appealed for International Aid</p>
                         <svg id="yes-svg" width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}></svg>
                     </div>
