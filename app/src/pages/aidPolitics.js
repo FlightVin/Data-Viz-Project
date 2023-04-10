@@ -35,11 +35,13 @@ export default function AidPolitics(props) {
             const noSvg = d3.select('#no-svg');
             noSvg.selectAll('*').remove();
 
-            const yesData = data.filter(d => d['Appeal'] === 'Yes');
-            const noData = data.filter(d => d['Appeal'] === 'No');
+            const checkDate = (d) => {
+                console.log(Number(d['Start Year']));
+                return Number(d['Start Year']) >= yearRange[0] && Number(d['Start Year']) <= yearRange[1];
+            }
 
-            // making svg for yes responses
-
+            var yesData = data.filter(d => d['Appeal'] === 'Yes' && checkDate(d));
+            var noData = data.filter(d => d['Appeal'] === 'No' && checkDate(d));
 
             // draw for yes
             var layout = cloud()
