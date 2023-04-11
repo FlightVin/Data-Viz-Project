@@ -174,6 +174,8 @@ export default function AidPolitics(props) {
                         <svg id="no-svg" width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}></svg>
                     </div>
                 </div>
+
+                <p>Countries that appealed as well as didn't appeal on various occasions are visualized in both the word clouds</p>
             </main>
         </>
     );
