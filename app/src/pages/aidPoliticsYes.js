@@ -57,7 +57,7 @@ export default function AidPoliticsYes(props) {
             yesData.forEach(d => {
                 continentSet.add(d['Continent']);
             })
-            const continentArray = new Array();
+            const continentArray = [];
             continentSet.forEach(d => {
                 continentArray.push(d);
             });
@@ -68,7 +68,7 @@ export default function AidPoliticsYes(props) {
             yesData.forEach(d => {
                 countrySet.add(d['Country']);
             })
-            const countryArray = new Array();
+            const countryArray = [];
             countrySet.forEach(d => {
                 countryArray.push({Country: d, Aid: 0});
             })
