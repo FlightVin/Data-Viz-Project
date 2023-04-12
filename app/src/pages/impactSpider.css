@@ -1,0 +1,32 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.select {
+    background-color: lightblue;
+    color: white;
+    border: 2px solid blue;
+    padding: 0.5em;
+    font-size: 1em;
+}
+
+.select:focus {
+    outline: none;
+    border-color: darkblue;
+}
+
+
+.chart-container {
+    width: 700px;
+    height: 700px;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.radarChart {
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+}
