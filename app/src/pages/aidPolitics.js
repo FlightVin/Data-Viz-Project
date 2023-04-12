@@ -50,59 +50,107 @@ export default function AidPolitics(props) {
             var yesData = data.filter(d => d['Appeal'] === 'Yes' && checkDate(d));
             var noData = data.filter(d => d['Appeal'] === 'No' && checkDate(d));
 
+            // getting set of continents
+            const continentSet = new Set();
+            data.forEach(d => {
+                continentSet.add(d['Continent']);
+            })
+            const continentArray = new Array();
+            continentSet.forEach(d => {
+                continentArray.push(d);
+            });
+            console.log(continentArray);
+
+            // making scales
+            var color = d3.scaleOrdinal()
+                .domain(continentArray)
+                .range(d3.schemeSet1);
+
             // draw for yes
+            const yesDraw = (words) => {
+                yesSvg
+                    .append("g")
+                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+                    .selectAll("text")
+                    .data(words)
+                    .enter()
+                    .append("text")
+                    .style("font-size", 20)
+                    .style("fill", d => {
+                        return color(d['Continent'])
+                    })
+                    .attr("text-anchor", "middle")
+                    .style("font-family", "Impact")
+                    .attr("transform", d => {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(d =>  { return d.text; });
+            }
+
             var layout = cloud()
                 .size([width, height])
-                .words(yesData.map(function(d) { return {text: d['Country']}; }))
+                .words(yesData.map( d => {return {'text': d['Country'], 'Continent': d['Continent']}}))
                 .padding(5)
                 .rotate(-45)
                 .fontSize(20)
                 .on("end", yesDraw);
             layout.start();
 
-            function yesDraw(words) {
-                yesSvg
+            // draw for no
+            const noDraw = (words) =>  {
+                noSvg
                     .append("g")
                     .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
                     .selectAll("text")
-                        .data(words)
-                    .enter().append("text")
-                        .style("font-size", 20)
-                        .style("fill", "#69b3a2")
-                        .attr("text-anchor", "middle")
-                        .style("font-family", "Impact")
-                        .attr("transform", function(d) {
+                    .data(words)
+                    .enter()
+                    .append("text")
+                    .style("font-size", 20)
+                    .style("fill", d => {
+                        return color(d['Continent'])
+                    })                    
+                    .attr("text-anchor", "middle")
+                    .style("font-family", "Impact")
+                    .attr("transform", d => {
                         return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                        })
-                        .text(function(d) { return d.text; });
+                    })
+                    .text(d =>  { return d.text; });
             }
 
-            // draw for no
             layout = cloud()
                 .size([width, height])
-                .words(noData.map(function(d) { return {text: d['Country']}; }))
+                .words(noData.map( d => {return {'text': d['Country'], 'Continent': d['Continent']}}))
                 .padding(5)
                 .rotate(-45)
                 .fontSize(20)
                 .on("end", noDraw);
             layout.start();
 
-            function noDraw(words) {
-                noSvg
-                    .append("g")
-                    .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                    .selectAll("text")
-                        .data(words)
-                    .enter().append("text")
-                        .style("font-size", 20)
-                        .style("fill", "#69b3a2")
-                        .attr("text-anchor", "middle")
-                        .style("font-family", "Impact")
-                        .attr("transform", function(d) {
-                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                        })
-                        .text(function(d) { return d.text; });
-            }
+            const svg = d3.select('#legend-viz');
+            svg.selectAll('*').remove();
+
+            svg.selectAll("legend-circle")
+                .data(continentArray)
+                .enter()
+                .append("circle")
+                .attr("cx", 30)
+                .attr("cy", (d, i) => {return height/3 + i*40}) // 100 is where the first dot appears. 25 is the distance between dots
+                .attr("r", 9)
+                .style("fill", d => {return color(d)})
+                .style("fill-opacity", 0.7)
+                .attr("stroke", "black")
+                .style("stroke-width", 0.4)
+
+            svg.selectAll("legend-labeks")
+                .data(continentArray)
+                .enter()
+                .append("text")
+                .attr("x", 50)
+                .attr("y",  (d,i) => { return height/3 + i*40}) // 100 is where the first dot appears. 25 is the distance between dots
+                .style("fill", d => { return color(d)})
+                .text( d => d)
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle")
         }
 
         if (!isLoading) drawAidPolitics();
@@ -172,6 +220,11 @@ export default function AidPolitics(props) {
                     <div id="no-div" className="svg-div">
                         <p>Didn't Appeal</p>
                         <svg id="no-svg" width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}></svg>
+                    </div>
+
+                    <div className="legend-div">
+                        <svg id="legend-viz" width={width/3 + margin.left + margin.right} height={height + margin.top + margin.bottom}>
+                        </svg>
                     </div>
                 </div>
 

@@ -1,12 +1,8 @@
 import * as d3 from "d3";
-import Slider from '@mui/material/Slider';
 import * as React from 'react';
 import './aidPolitics.css'
-import Box from '@mui/material/Box';
 import Loading from './loading.js';
-import Button from '@mui/material/Button';
-import { useNavigate, useParams} from "react-router-dom";
-const cloud = require("d3-cloud");
+import {  useParams} from "react-router-dom";
 
 const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
 
@@ -33,7 +29,7 @@ export default function AidPoliticsYes(props) {
 
     React.useEffect(() => {
         const drawAidPolitics = () => {
-            const svg = d3.select('#svg-viz');
+            var svg = d3.select('#svg-viz');
             svg.selectAll('*').remove();
 
             var tooltip = d3
@@ -118,20 +114,20 @@ export default function AidPoliticsYes(props) {
                 .append("circle")
                 .attr("class", "country-circle")
                 .attr("id", d => d['Country']+'-'+d['Aid'])
+                .attr("cx", width / 2)
+                .attr("cy", height / 2)
                 .attr("r", d => {
                     if (d['Aid'] === 0){
                         return 10;
                     }
                     return size(d['Aid'])
                 })
-                .attr("cx", width / 2)
-                .attr("cy", height / 2)
                 .style("fill", d => { 
                     return color(d['Continent'])
                 })
                 .style("fill-opacity", 0.8)
                 .attr("stroke", "black")
-                .style("stroke-width", 1)
+                .style("stroke-width", 0.6)
                 .on("mouseover", function (e, d) {
                     tooltip.style("opacity", 1);
                   })
@@ -159,9 +155,35 @@ export default function AidPoliticsYes(props) {
                 .nodes(countryArray)
                 .on("tick", function(d){
                   node
-                      .attr("cx", function(d){ return d.x; })
-                      .attr("cy", function(d){ return d.y; })
+                      .attr("cx", d => d.x)
+                      .attr("cy", d => d.y)
                 });
+
+            svg = d3.select('#legend-viz');
+            svg.selectAll('*').remove();
+
+            svg.selectAll("legend-circle")
+                .data(continentArray)
+                .enter()
+                .append("circle")
+                .attr("cx", 100)
+                .attr("cy", (d, i) => {return height/3 + i*40}) // 100 is where the first dot appears. 25 is the distance between dots
+                .attr("r", 9)
+                .style("fill", d => {return color(d)})
+                .style("fill-opacity", 0.7)
+                .attr("stroke", "black")
+                .style("stroke-width", 0.4)
+
+            svg.selectAll("legend-labeks")
+                .data(continentArray)
+                .enter()
+                .append("text")
+                .attr("x", 120)
+                .attr("y",  (d,i) => { return height/3 + i*40}) // 100 is where the first dot appears. 25 is the distance between dots
+                .style("fill", d => { return color(d)})
+                .text( d => d)
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle")
         }
 
         if (!isLoading) drawAidPolitics();
@@ -190,11 +212,17 @@ export default function AidPoliticsYes(props) {
                     International Aid Visualization: Countries which appealed for international aid
                 </p>
                 <div className="visual-div">
-                    <div className="svg-div">
+                    <div className="svg-div2">
                         <svg id="svg-viz" width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}>
+                        </svg>
+                        <svg id="legend-viz" width={width/3 + margin.left + margin.right} height={height + margin.top + margin.bottom}>
                         </svg>
                     </div>
                 </div>
+
+                <p>
+                    Hover over circle to see aid received.
+                </p>
             </main>
         </>
     );
