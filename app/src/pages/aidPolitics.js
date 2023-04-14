@@ -65,91 +65,35 @@ export default function AidPolitics(props) {
             .domain(continentArray)
             .range(d3.schemeSet1);
 
-        // draw for yes
-        const yesDraw = (words) => {
-            yesSvg
-                .append("g")
-                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                .selectAll("text")
-                .data(words)
-                .enter()
-                .append("text")
-                .style("font-size", 20)
-                .style("fill", d => {
-                    return color(d['Continent'])
-                })
-                .attr("text-anchor", "middle")
-                .style("font-family", "Impact")
-                .attr("transform", d => {
-                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                })
-                .text(d =>  { return d.text; });
+        const countrySet = new Set();
+        yesData.forEach(d => {
+            countrySet.add(d['Country']);
+        })
+        const countryArray = [];
+        countrySet.forEach(d => {
+            countryArray.push({Country: d, AidCalls: 0});
+        })
+        yesData.forEach(d => {
+            countryArray.forEach(cData => {
+                if (cData['Country'] === d['Country']){
+                    cData['AidCalls']++;
+
+                    // adding continent
+                    cData['Continent'] = d['Continent']
+                }
+            })
+        })
+
+        // console.log(countryArray);
+        var treeData = {
+            "name":"Countries that appealed for international aid",
+            "pathColor":"black",
+            "nodeColor":"white",
+            "children":[
+            ]
         }
 
-        var layout = cloud()
-            .size([width, height])
-            .words(yesData.map( d => {return {'text': d['Country'], 'Continent': d['Continent']}}))
-            .padding(5)
-            .rotate(-45)
-            .fontSize(20)
-            .on("end", yesDraw);
-        layout.start();
-
-        // draw for no
-        const noDraw = (words) =>  {
-            noSvg
-                .append("g")
-                .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
-                .selectAll("text")
-                .data(words)
-                .enter()
-                .append("text")
-                .style("font-size", 20)
-                .style("fill", d => {
-                    return color(d['Continent'])
-                })                    
-                .attr("text-anchor", "middle")
-                .style("font-family", "Impact")
-                .attr("transform", d => {
-                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-                })
-                .text(d =>  { return d.text; });
-        }
-
-        layout = cloud()
-            .size([width, height])
-            .words(noData.map( d => {return {'text': d['Country'], 'Continent': d['Continent']}}))
-            .padding(5)
-            .rotate(-45)
-            .fontSize(20)
-            .on("end", noDraw);
-        layout.start();
-
-        const svg = d3.select('#legend-viz');
-        svg.selectAll('*').remove();
-
-        svg.selectAll("legend-circle")
-            .data(continentArray)
-            .enter()
-            .append("circle")
-            .attr("cx", 30)
-            .attr("cy", (d, i) => {return height/3 + i*40}) // 100 is where the first dot appears. 25 is the distance between dots
-            .attr("r", 9)
-            .style("fill", d => {return color(d)})
-            .style("fill-opacity", 0.7)
-            .attr("stroke", "black")
-            .style("stroke-width", 0.4)
-
-        svg.selectAll("legend-labeks")
-            .data(continentArray)
-            .enter()
-            .append("text")
-            .attr("x", 50)
-            .attr("y",  (d,i) => { return height/3 + i*40}) // 100 is where the first dot appears. 25 is the distance between dots
-            .style("fill", d => { return color(d)})
-            .text( d => d)
-            .attr("text-anchor", "left")
-            .style("alignment-baseline", "middle")
+        
     }
 
     React.useEffect(() => {
@@ -212,23 +156,8 @@ export default function AidPolitics(props) {
                 </p>
 
                 <div className="visual-div">
-                    <div id="yes-div" className="svg-div" onClick={navigateTo('/aid-politics-yes')}>
-                        <p>Appealed for International Aid</p>
-                        <svg id="yes-svg" width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}></svg>
-                    </div>
 
-                    <div id="no-div" className="svg-div">
-                        <p>Didn't Appeal</p>
-                        <svg id="no-svg" width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}></svg>
-                    </div>
-
-                    <div className="legend-div">
-                        <svg id="legend-viz" width={width/3 + margin.left + margin.right} height={height + margin.top + margin.bottom}>
-                        </svg>
-                    </div>
                 </div>
-
-                <p>Countries that appealed as well as didn't appeal on various occasions are visualized in both the word clouds</p>
             </main>
         </>
     );

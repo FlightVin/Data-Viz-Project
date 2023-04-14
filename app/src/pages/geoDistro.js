@@ -63,7 +63,7 @@ const projection = d3.geoMercator()
 
 const path = d3.geoPath().projection(projection);
 
-const container = d3.select("body");
+const container = d3.select(".geodistro-div");
 const svg = container.append("svg");
 
 svg.attr("width", width)
@@ -179,7 +179,9 @@ svg.selectAll('path')
 
 return (
     <>
+
         <main
+            className="geodistro-div"
             style={{
             height: "20vh",
             display: "flex",

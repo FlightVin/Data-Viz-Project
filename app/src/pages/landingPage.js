@@ -1,10 +1,9 @@
-// assigned to Vineeth
-
 import { Link } from "react-router-dom";
 
 export default function LandingPage(props) {
     return (
         <>
+            <main>
             <ul>
                 <li>
                     <Link to="/geo-distro">geo-Distro</Link>
@@ -19,6 +18,7 @@ export default function LandingPage(props) {
                     <Link to="/associated-disaster">associated-disaster</Link>
                 </li>
             </ul>
+            </main>
         </>
     );
 }
