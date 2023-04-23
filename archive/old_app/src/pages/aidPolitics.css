@@ -1,0 +1,29 @@
+.visual-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.svg-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#yes-div {
+    cursor: pointer;
+}
+
+.country-circle:hover {
+    stroke-width: 4px !important;
+    opacity: 0.8 !important;
+}
+
+.svg-div2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
