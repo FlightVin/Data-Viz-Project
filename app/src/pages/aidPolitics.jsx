@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import Loading from './loading';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
+import Tree from 'react-d3-tree';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
 export default function AidPolitics(props) {
@@ -13,6 +15,8 @@ export default function AidPolitics(props) {
     const [data, setData] = React.useState(null);
     const [isLoading, setLoading] = React.useState(true);
     const [changeState, setChangeState] = React.useState(true);
+    const [treeData, setTreeData] = React.useState({});
+    const [vizLoading, setVizLoading] = React.useState(false);
     const navigate = useNavigate();
 
     const navigateTo = (route) => {
@@ -20,10 +24,6 @@ export default function AidPolitics(props) {
             navigate(route+"/"+yearRange[0]+"/"+yearRange[1]);
         }
     }
-
-    var margin = {top: 10, right: 10, bottom: 10, left: 10},
-    width = 400 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
 
     React.useEffect(() => {
         setTimeout(() => {
@@ -36,6 +36,7 @@ export default function AidPolitics(props) {
     }, []);
 
     const drawAidPolitics = () => {
+        
         const yesSvg = d3.select('#yes-svg');
         yesSvg.selectAll('*').remove();
         const noSvg = d3.select('#no-svg');
@@ -57,7 +58,7 @@ export default function AidPolitics(props) {
         continentSet.forEach(d => {
             continentArray.push(d);
         });
-        console.log(continentArray);
+        // console.log(continentArray);
 
         // making scales
         var color = d3.scaleOrdinal()
@@ -68,14 +69,84 @@ export default function AidPolitics(props) {
         yesData.forEach(d => {
             countrySet.add(d['Country']);
         })
-        const countryArray = [];
+        var countryArray = [];
         countrySet.forEach(d => {
-            countryArray.push({Country: d, AidCalls: 0});
+            countryArray.push({Country: d, AidCalls: []});
         })
         yesData.forEach(d => {
             countryArray.forEach(cData => {
                 if (cData['Country'] === d['Country']){
-                    cData['AidCalls']++;
+                    cData['AidCalls'].push(d.Year);
+
+                    // adding continent
+                    cData['Continent'] = d['Continent']
+                }
+            })
+        })
+        function compareByName(a, b) {
+            const nameA = a.Country.toUpperCase(); 
+            const nameB = b.Country.toUpperCase(); 
+            if (nameA < nameB) {
+              return -1;
+            }
+          
+            if (nameA > nameB) {
+              return 1;
+            }
+                      return 0;
+        }
+
+        countryArray.sort(compareByName)
+        
+        /*
+            data in countryArray
+                AidCalls -  array of years in which they appealed for aid
+                Continent
+                Country
+        */
+
+        // formatting tree data from countryArray
+        const curYesTreeData = {
+            name: 'Yes',
+            children: [],
+        };
+
+        // adding subdivision of continents
+        continentArray.forEach(c => {
+            curYesTreeData.children.push({
+                name: c,
+                children: [],
+            })
+        })
+
+        // pushing contries onto the object
+        countryArray.forEach(d => {
+            curYesTreeData.children.forEach(continent => {
+                if (continent.name === d.Continent){
+                    const yearArray = [];
+                    d['AidCalls'].forEach(y => {
+                        yearArray.push({
+                            name: y,
+                        })
+                    })
+
+                    continent.children.push({
+                        name: d.Country.slice(0, 14),
+                        children: yearArray,
+                    })
+                }
+            })
+        })
+
+        // doing the same for no data
+        countryArray = []
+        countrySet.forEach(d => {
+            countryArray.push({Country: d, AidCalls: []});
+        })
+        noData.forEach(d => {
+            countryArray.forEach(cData => {
+                if (cData['Country'] === d['Country']){
+                    cData['AidCalls'].push(d.Year);
 
                     // adding continent
                     cData['Continent'] = d['Continent']
@@ -83,20 +154,56 @@ export default function AidPolitics(props) {
             })
         })
 
-        // console.log(countryArray);
-        var treeData = {
-            "name":"Countries that appealed for international aid",
-            "pathColor":"black",
-            "nodeColor":"white",
-            "children":[
+        // formatting tree data from countryArray
+        const curNoTreeData = {
+            name: 'No',
+            children: [],
+        };
+
+        // adding subdivision of continents
+        continentArray.forEach(c => {
+            curNoTreeData.children.push({
+                name: c,
+                children: [],
+            })
+        })
+
+        // pushing contries onto the object
+        countryArray.forEach(d => {
+            curNoTreeData.children.forEach(continent => {
+                if (continent.name === d.Continent){
+                    const yearArray = [];
+                    d['AidCalls'].forEach(y => {
+                        yearArray.push({
+                            name: y,
+                        })
+                    })
+
+                    continent.children.push({
+                        name: d.Country.slice(0, 14),
+                        children: yearArray,
+                    })
+                }
+            })
+        })
+
+        const curTreeData = {
+            name: 'Appealed for aid?',
+            children:[
+                curYesTreeData,
+                curNoTreeData
             ]
         }
 
-        
+        setTreeData(curTreeData);
     }
 
     React.useEffect(() => {
-        if (!isLoading) drawAidPolitics();
+        setVizLoading(true);
+        setTimeout(() => {
+            if (!isLoading) drawAidPolitics();
+            setVizLoading(false);
+        }, 1000);
     }, [changeState, isLoading]);
 
 
@@ -127,6 +234,7 @@ export default function AidPolitics(props) {
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
+                padding: '20px',
                 }}
             >
                 <p
@@ -150,12 +258,30 @@ export default function AidPolitics(props) {
                     </Box>
                 </p>
 
-                <p>
-                    <Button variant="contained" onClick={handleViz}>Visualize</Button>
-                </p>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Button variant="contained" onClick={handleViz}>Visualize</Button> 
+                </div>
 
-                <div className="visual-div">
+                <div className="visual-div" style={{ width: '1400px', height: '900px' }}>
+                    {
+                        !vizLoading ? 
+                            <Tree 
+                                data={treeData} 
+                                separation= {{ nonSiblings: 0.5, siblings: 0.3 }}    
+                                translate={{x:500, y:300}}
+                                depthFactor={200}
+                                rootNodeClassName="node__root"
+                                branchNodeClassName="node__branch"
+                                leafNodeClassName="node__leaf"
+                            />
+                        :
+                            <CircularProgress />
+                    }
+                    
+                </div>
 
+                <div>
+                    <Button variant="outlined" onClick={navigateTo('/aid-politics-yes')}>Map View for only appeals</Button>
                 </div>
             </main>
         </>

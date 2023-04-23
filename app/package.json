@@ -16,6 +16,7 @@
     "d3-cloud": "^1.2.5",
     "fuse.js": "^6.6.2",
     "react": "^18.2.0",
+    "react-d3-tree": "^3.5.2",
     "react-dom": "^18.2.0",
     "react-flatpickr": "^3.10.13",
     "react-router-dom": "^6.8.1",

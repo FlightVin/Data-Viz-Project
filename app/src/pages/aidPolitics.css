@@ -27,3 +27,20 @@
     align-items: center;
     flex-direction: row;
 }
+
+.node__root > circle {
+    fill: red;
+}
+  
+.node__branch > circle {
+    fill: #FCE77D;
+}
+
+.node__branch > circle:hover{
+    fill: #F96167;
+}
+  
+.node__leaf > circle {
+    fill: #CCF381;
+    r: 10;
+}
