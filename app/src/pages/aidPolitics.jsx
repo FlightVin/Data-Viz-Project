@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import Tree from 'react-d3-tree';
 import CircularProgress from '@mui/material/CircularProgress';
+import Header from "../partials/Header";
 
 const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
 export default function AidPolitics(props) {
@@ -227,6 +228,7 @@ export default function AidPolitics(props) {
 
     return (
         <>
+            <Header/>
             <main
                 style={{
                 height: "100vh",

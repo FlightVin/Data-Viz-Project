@@ -63,7 +63,7 @@ function FeaturesBlocks() {
 
             {/* 4th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
-              <Link to="/">
+              <Link to="/disaster-types">
                 <img className="mx-auto" src={HeroImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Disaster Types Distribution</h4>
               </Link>
