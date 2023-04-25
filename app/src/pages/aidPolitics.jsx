@@ -240,6 +240,9 @@ export default function AidPolitics(props) {
                 }}
             >
                 <p
+                    style={{
+                        marginTop:'100px'
+                    }}
                 id="vineeth_heading"
                 >
                     International Aid Visualization: Select Range of Years

@@ -143,7 +143,7 @@ import Header from "../partials/Header";
     
         if (Tl) svg.append("g")
             .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
+            .attr("font-size", 14)
         .selectAll("text")
         .data(nodes)
         .join("text")
@@ -206,24 +206,6 @@ export default function DisasterTypes(props) {
         const plotData = [];
         curData.forEach(d => {
             var found;
-            
-            // groups and subgroups
-            found = false;
-            plotData.forEach(existingEle => {
-                if (existingEle.source === d.Group
-                && existingEle.target === d.Subgroup){
-                    existingEle.value++;   
-                    found = true;
-                }
-            })
-
-            if (!found){
-                plotData.push({
-                    source: d.Group,
-                    target: d.Subgroup,
-                    value: 1,
-                })
-            }
 
             // subgroups and types
             found = false;
@@ -287,15 +269,12 @@ export default function DisasterTypes(props) {
             nodeAlign:'justify', 
             linkColor:'source', 
             format: (f => d => `${f(d)} Occurances`)(d3.format(",.1~f")),
-            width:1000,
-            height: 1000
+            width:1400,
+            height:1000,
             });
 
-        console.log(ele);
-        console.log(typeof(ele));
 
         const parent = document.getElementById('viz-div');
-        console.log(parent);
         parent.appendChild(ele);
     }
 

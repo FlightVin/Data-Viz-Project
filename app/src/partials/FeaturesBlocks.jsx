@@ -1,7 +1,8 @@
 import React from 'react';
 
-import TreeImage from '../images/tidy-tree.jpg';
+import TreeImage from '../images/tidy-chart.png';
 import RadarImage from '../images/radar-chart.png';
+import SankeyImage from '../images/sankey-chart.png'
 import { Link } from 'react-router-dom';
 
 function FeaturesBlocks() {
@@ -65,19 +66,19 @@ function FeaturesBlocks() {
             {/* 4th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/disaster-types">
-              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
+              <img className="mx-auto h-52" src={SankeyImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Disaster Types Distribution</h4>
               </Link>
               <p className="text-gray-600 text-center">
                 Disasters can be grouped intp disaster groups, then further into disaster subgroups and disaster types.
-                The sanky chart will help us visualise the percentage of disasters
+                The sankey chart will help us visualise the percentage of disasters
                 that belong to a particular division.
               </p>
             </div>
 
             {/* 5th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
-              <Link to="/">
+              <Link to="/associated-disaster">
               <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Associated disasters</h4>
               </Link>
