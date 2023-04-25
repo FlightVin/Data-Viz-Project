@@ -1,6 +1,7 @@
 import React from 'react';
 
-import HeroImage from '../images/main_page_image.jpeg';
+import TreeImage from '../images/tidy-tree.jpg';
+import RadarImage from '../images/radar-chart.png';
 import { Link } from 'react-router-dom';
 
 function FeaturesBlocks() {
@@ -28,7 +29,7 @@ function FeaturesBlocks() {
             {/* 1st item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/aid-politics">
-                <img className="mx-auto" src={HeroImage} alt="Hero" />
+                <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">International Aid</h4>
               </Link>
               <p className="text-gray-600 text-center">Geopolitics and dependance on the international community can be inferred by
@@ -39,7 +40,7 @@ function FeaturesBlocks() {
             {/* 2nd item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/impact-spider">
-                <img className="mx-auto" src={HeroImage} alt="Hero" />
+              <img className="mx-auto h-52" src={RadarImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Human and Economic factors</h4>
               </Link>
               <p className="text-gray-600 text-center">By dividing the magnitude scale into four parts and assigning a specific colour to
@@ -51,7 +52,7 @@ function FeaturesBlocks() {
             {/* 3rd item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/geo-distro">
-                <img className="mx-auto" src={HeroImage} alt="Hero" />
+              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Geographical Distribution</h4>
               </Link>
               <p className="text-gray-600 text-center">A Mercator map of the world has been presented to visualise the distribution of
@@ -64,16 +65,20 @@ function FeaturesBlocks() {
             {/* 4th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/disaster-types">
-                <img className="mx-auto" src={HeroImage} alt="Hero" />
+              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Disaster Types Distribution</h4>
               </Link>
-              <p className="text-gray-600 text-center">Sanky chart</p>
+              <p className="text-gray-600 text-center">
+                Disasters can be grouped intp disaster groups, then further into disaster subgroups and disaster types.
+                The sanky chart will help us visualise the percentage of disasters
+                that belong to a particular division.
+              </p>
             </div>
 
             {/* 5th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/">
-                <img className="mx-auto" src={HeroImage} alt="Hero" />
+              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Associated disasters</h4>
               </Link>
               <p className="text-gray-600 text-center">Sunburst chart</p>
@@ -82,7 +87,7 @@ function FeaturesBlocks() {
             {/* 6th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/">
-                <img className="mx-auto" src={HeroImage} alt="Hero" />
+              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Emergency Declaration</h4>
               </Link>
               <p className="text-gray-600 text-center">Scatter Graph</p>
@@ -91,7 +96,7 @@ function FeaturesBlocks() {
             {/* 7th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/">
-                <img className="mx-auto" src={HeroImage} alt="Hero" />
+              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Emergency Declaration</h4>
               </Link>
               <p className="text-gray-600 text-center">Stacked Bar Chart</p>
