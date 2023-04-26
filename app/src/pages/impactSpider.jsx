@@ -11,7 +11,7 @@ export default function ImpactSpider(props) {
     const [disasterdata, SetDData] = useState(null); // contains the average data of each part and type
     const [graph, SetGraph] = useState(null);
     const [magParts, SetMagParts] = useState(null); // needed for labels and colour of clouds
-    const [type, SetType] = useState(null);
+    const [type, SetType] = useState("Earthquake");
     const [typearray, SetTypeArray] = useState(['Earthquake', 'Wildfire', 'Flood', 'Storm', 'Extreme temperature ', 'Drought', 'Landslide', 'Volcanic activity', 'Epidemic', 'Insect infestation'])
     const [Scale, SetScale] = useState(null);
 
@@ -515,7 +515,7 @@ export default function ImpactSpider(props) {
         if (disasterdata && !graph) {
             // console.log(disasterdata)
             var margin = { top: 100, right: 100, bottom: 100, left: 100 },
-                width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
+                width = Math.min(800, window.innerWidth - 10) - margin.left - margin.right,
                 height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
 
             // console.log(disasterdata);
@@ -540,6 +540,7 @@ export default function ImpactSpider(props) {
         SetType(event.target.value);
     };
 
+
     return (
         <div className='example-container'>
             <div className='custom-select'>
@@ -551,7 +552,6 @@ export default function ImpactSpider(props) {
                                 onChange={handleOptionChange}
                                 className="select"
                             >
-                                <option value="">Select an option</option>
                                 {typearray.map((option) => (
                                     <option key={option} value={option}>
                                         {option}
