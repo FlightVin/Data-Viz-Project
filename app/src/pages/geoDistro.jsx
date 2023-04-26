@@ -209,7 +209,7 @@ export default function GeoDistro(props) {
 
         tooltip
           .html(
-            `Country: ${countryName}
+            `Country: ${d.properties.name}
              <br>
              No of occurrences of this disaster : ${vval}`
           )
