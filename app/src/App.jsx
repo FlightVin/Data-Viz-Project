@@ -18,6 +18,7 @@ import GeoDistro from './pages/geoDistro';
 import ImpactSpider from './pages/impactSpider';
 import AidPoliticsYes from './pages/aidPoliticsYes';
 import DisasterTypes from './pages/disasterTypes';
+import ImpactDot from './pages/impact'
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
         <Route path="/aid-politics" element={<AidPolitics />} />
         <Route path="/associated-disaster" element={<AssociatedDisaster />} />
         <Route path="/disaster-types" element={<DisasterTypes />} />
+        <Route path="/impact-dot" element={<ImpactDot />} />
       </Routes>
     </>
   );
