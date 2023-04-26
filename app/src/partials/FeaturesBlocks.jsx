@@ -5,7 +5,11 @@ import RadarImage from '../images/radar-chart.png';
 import SankeyImage from '../images/sankey-chart.png';
 import SunburstImage from '../images/sunburst-plot.png';
 import VineethImage from '../images/vineeth.jpg';
-import worldmap from '../images/worldmap.png';
+import worldImage from '../images/world-map.jpeg';
+import barImage from '../images/bar-chart.png';
+import AnushImage from '../images/anush.png';
+import impactImage from '../images/impact-chart.png';
+import MitanshImage from '../images/mitansh.png';
 import { Link } from 'react-router-dom';
 
 function FeaturesBlocks() {
@@ -89,7 +93,7 @@ function FeaturesBlocks() {
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
             data-aos="fade-up" data-aos-delay="450">
               <Link to="/geo-distro">
-              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
+              <img className="mx-auto h-52" src={worldImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Geographical Distribution</h4>
               </Link>
               <p className="text-gray-600 text-center">A Mercator map of the world has been presented to visualise the distribution of
@@ -101,21 +105,26 @@ function FeaturesBlocks() {
 
            {/* 6th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
-              <Link to="/impact-dot">
-                <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
-                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Emergency Declaration</h4>
+              <Link to="/decadal-deaths">
+                <img className="mx-auto h-52" src={barImage} alt="Hero" />
+                <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Decadal Fatalities</h4>
               </Link>
-              <p className="text-gray-600 text-center">Dot Stacked Graph</p>
+              <p className="text-gray-600 text-center">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum unde architecto error sed ad consequatur voluptas ea nisi atque, et quas quae culpa alias molestiae, fugit dolores tempora officia laborum?
+
+              </p>
             </div>
 
             {/* 7th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
             data-aos="fade-up" data-aos-delay="450">
-              <Link to="/decadal-deaths">
-              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
+              <Link to="/impact-dot">
+              <img className="mx-auto h-52" src={impactImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Emergency Declaration</h4>
               </Link>
-              <p className="text-gray-600 text-center">Stacked Bar Chart</p>
+              <p className="text-gray-600 text-center">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minima harum est dolore delectus incidunt, aliquam nulla eaque soluta. Atque harum nostrum earum id saepe in dicta voluptatibus deleniti assumenda eligendi.
+              </p>
             </div>
 
           </div>
@@ -146,7 +155,7 @@ function FeaturesBlocks() {
             <div className="relative flex flex-col items-center p-6 bg-slate-200 rounded shadow-xl"
             data-aos="fade-up" data-aos-delay="450">
               <Link to="/aid-politics">
-                <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
+                <img className="mx-auto h-52" src={AnushImage} alt="Hero" />
                 <p className="text-xl leading-snug tracking-tight mb-1 mt-1">Anush Anand</p>
               </Link>
             </div>
@@ -155,7 +164,7 @@ function FeaturesBlocks() {
             <div className="relative flex flex-col items-center p-6 bg-slate-200 rounded shadow-xl"
             data-aos="fade-up" data-aos-delay="450">
               <Link to="/aid-politics">
-                <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
+                <img className="mx-auto h-52" src={MitanshImage} alt="Hero" />
                 <p className="text-xl leading-snug tracking-tight mb-1 mt-1">Mitansh Kayathwal</p>
               </Link>
             </div>
