@@ -4,7 +4,8 @@ import TreeImage from '../images/tidy-chart.png';
 import RadarImage from '../images/radar-chart.png';
 import SankeyImage from '../images/sankey-chart.png';
 import SunburstImage from '../images/sunburst-plot.png';
-import VineethImage from '../images/vineeth.jpg'
+import VineethImage from '../images/vineeth.jpg';
+import worldmap from '../images/worldmap.png';
 import { Link } from 'react-router-dom';
 
 function FeaturesBlocks() {
@@ -98,14 +99,13 @@ function FeaturesBlocks() {
               vice-versa.</p>
             </div>
 
-            {/* 6th item */}
-            <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
-            data-aos="fade-up" data-aos-delay="450">
-              <Link to="/">
-              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
+           {/* 6th item */}
+            <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
+              <Link to="/impact-dot">
+                <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Emergency Declaration</h4>
               </Link>
-              <p className="text-gray-600 text-center">Scatter Graph</p>
+              <p className="text-gray-600 text-center">Dot Stacked Graph</p>
             </div>
 
             {/* 7th item */}
