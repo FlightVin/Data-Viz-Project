@@ -279,7 +279,9 @@ export default function AssociatedDisaster(props) {
                     style={{
                         width: '900px',
                         marginTop:'30px'
-                    }}>
+                    }}
+                    data-aos="zoom-in" data-aos-delay="400"
+                    >
 
                 </div>
 

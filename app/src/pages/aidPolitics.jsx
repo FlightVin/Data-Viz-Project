@@ -248,7 +248,9 @@ export default function AidPolitics(props) {
                     International Aid Visualization: Select Range of Years
                 </p>
                 <p>
-                    <Box sx={{ width: 500 }}>
+                    <Box sx={{ width: 500 }}
+                    data-aos="zoom-in" data-aos-delay="300"
+                    >
                         <Slider
                             getAriaLabel={() => 'Year range'}
                             value={yearRange}
@@ -263,9 +265,19 @@ export default function AidPolitics(props) {
                     </Box>
                 </p>
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                    <Button variant="contained" onClick={handleViz}>Visualize</Button> 
+                <div style={{display: 'flex', justifyContent: 'space-between'}}
+                    data-aos="zoom-in" data-aos-delay="400"
+                >
+                    <Button variant="outlined" onClick={handleViz}>Visualize</Button> 
+                    <Button variant="contained" onClick={navigateTo('/aid-politics-yes')
+                    }
+                    style={{
+                        marginLeft:'30px'
+                    }}
+
+                    >Map View for only appeals</Button>
                 </div>
+
 
                 <div className="visual-div" style={{ width: '1400px', height: '900px' }}>
                     {
@@ -283,10 +295,6 @@ export default function AidPolitics(props) {
                             <CircularProgress />
                     }
                     
-                </div>
-
-                <div>
-                    <Button variant="outlined" onClick={navigateTo('/aid-politics-yes')}>Map View for only appeals</Button>
                 </div>
             </main>
         </>

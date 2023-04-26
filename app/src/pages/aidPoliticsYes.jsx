@@ -261,6 +261,7 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
+                        data-aos="zoom-in" data-aos-delay="450"
                     >
                     </div>
 
@@ -273,6 +274,7 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
+                        data-aos="zoom-in" data-aos-delay="450"
                     >
                     </div>
 
@@ -285,6 +287,7 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
+                        data-aos="zoom-in" data-aos-delay="450"
                     >
                         
                     </div>
@@ -298,6 +301,7 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
+                        data-aos="zoom-in" data-aos-delay="450"
                     >
                         
                     </div>
@@ -311,6 +315,7 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
+                        data-aos="zoom-in" data-aos-delay="450"
                     >
                         
                     </div>
@@ -324,6 +329,7 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
+                        data-aos="zoom-in" data-aos-delay="400"
                     >
                         
                     </div>
@@ -331,7 +337,9 @@ export default function AidPoliticsYes(props) {
 
 
                     <img className="h-full w-full opacity-50" 
-                    src={worldImage} alt="Hero" />
+                    src={worldImage} alt="Hero" 
+                    data-aos="zoom-in" data-aos-delay="300"
+                    />
 
                 </div>
             </main>

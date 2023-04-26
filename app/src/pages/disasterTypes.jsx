@@ -302,11 +302,14 @@ export default function DisasterTypes(props) {
                         marginTop: '100px'
                     }}
                     id="vineeth_heading"
+                    data-aos="zoom-in" data-aos-delay="100"
                 >
                     Disaster Types
                 </p>
 
-            <div id='viz-div'>
+            <div id='viz-div'
+                data-aos="zoom-in" data-aos-delay="400"
+            >
             </div>
                 
             </main>
