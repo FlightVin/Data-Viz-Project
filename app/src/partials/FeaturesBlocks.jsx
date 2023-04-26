@@ -71,7 +71,7 @@ function FeaturesBlocks() {
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Disaster Types Distribution</h4>
               </Link>
               <p className="text-gray-600 text-center">
-                Disasters can be grouped intp disaster groups, then further into disaster subgroups and disaster types.
+                Disasters can be grouped into disaster groups, then further into disaster subgroups and disaster types.
                 The sankey chart will help us visualise the percentage of disasters
                 that belong to a particular division.
               </p>
@@ -83,7 +83,10 @@ function FeaturesBlocks() {
               <img className="mx-auto h-52" src={SunburstImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Associated disasters</h4>
               </Link>
-              <p className="text-gray-600 text-center">Sunburst chart</p>
+              <p className="text-gray-600 text-center">
+              There are multiple instances of disasters leading to other disasters. The sunburst chart allows us to visualize 
+              which disasters can stem from a calamity and be better prepared for them.
+              </p>
             </div>
 
             {/* 6th item */}
