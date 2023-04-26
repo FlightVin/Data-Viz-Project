@@ -19,6 +19,7 @@ import ImpactSpider from './pages/impactSpider';
 import AidPoliticsYes from './pages/aidPoliticsYes';
 import DisasterTypes from './pages/disasterTypes';
 import ImpactDot from './pages/impact'
+import DecadalDeaths from "./pages/decadalDeaths";
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
         <Route path="/associated-disaster" element={<AssociatedDisaster />} />
         <Route path="/disaster-types" element={<DisasterTypes />} />
         <Route path="/impact-dot" element={<ImpactDot />} />
+        <Route path="/decadal-deaths" element={<DecadalDeaths />} />
       </Routes>
     </>
   );
