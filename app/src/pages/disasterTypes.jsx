@@ -166,20 +166,6 @@ export default function DisasterTypes(props) {
     const [isLoading, setLoading] = React.useState(true);
     const [data, setData] = React.useState([])
 
-
-    const energy = [
-        {
-            source: 'hehe',
-            target: 'lala',
-            value: 2
-        },
-        {
-            source: 'hehe',
-            target: 'kaka',
-            value: 1
-        }
-    ]
-
     const drawFunc = () =>{
 
         // removing older svgs
@@ -269,7 +255,7 @@ export default function DisasterTypes(props) {
             nodeAlign:'justify', 
             linkColor:'source', 
             format: (f => d => `${f(d)} Occurances`)(d3.format(",.1~f")),
-            width:1400,
+            width:1200,
             height:1000,
             });
 
