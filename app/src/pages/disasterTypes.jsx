@@ -4,7 +4,6 @@ import * as d3Sankey from "d3-sankey"
 import Loading from './loading';
 import Header from "../partials/Header";
 
-
 // Copyright 2021 Observable, Inc.
     // Released under the ISC license.
     // https://observablehq.com/@d3/sankey-diagram
@@ -72,7 +71,6 @@ import Header from "../partials/Header";
         console.log(nodeGroups)
         const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
     
-        // Compute the Sankey layout.
         d3Sankey.sankey()
             .nodeId(({index: i}) => N[i])
             .nodeAlign(nodeAlign)
@@ -81,13 +79,11 @@ import Header from "../partials/Header";
             .extent([[marginLeft, marginTop], [width - marginRight, height - marginBottom]])
         ({nodes, links});
     
-        // Compute titles and labels using layout nodes, so as to access aggregate values.
         if (typeof format !== "function") format = d3.format(format);
         const Tl = nodeLabel === undefined ? N : nodeLabel == null ? null : d3.map(nodes, nodeLabel);
         const Tt = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
         const Lt = linkTitle == null ? null : d3.map(links, linkTitle);
     
-        // A unique identifier for clip paths (to avoid conflicts).
         const uid = `O-${Math.random().toString(16).slice(2)}`;
     
         const svg = d3.create("svg")
@@ -106,6 +102,7 @@ import Header from "../partials/Header";
         .join("rect")
             .attr("x", d => d.x0)
             .attr("y", d => d.y0)
+            .attr('class', 'title-rect')
             .attr("height", d => d.y1 - d.y0)
             .attr("width", d => d.x1 - d.x0);
     
