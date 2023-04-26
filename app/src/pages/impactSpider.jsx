@@ -1,5 +1,7 @@
+// assigned to Anush
+
 import * as d3 from 'd3';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Select from 'react-select'
 import './impactSpider.css'
 
@@ -12,6 +14,10 @@ export default function ImpactSpider(props) {
     const [type, SetType] = useState("Earthquake");
     const [typearray, SetTypeArray] = useState(['Earthquake', 'Wildfire', 'Flood', 'Storm', 'Extreme temperature ', 'Drought', 'Landslide', 'Volcanic activity', 'Epidemic', 'Insect infestation'])
     const [Scale, SetScale] = useState(null);
+    const [UnitArray, SetUnitArray] = useState({
+        'Earthquake': "Richter", 'Wildfire': "Km2", 'Flood': "Km2", 'Storm': "Kph", 'Extreme temperature ': "°C", 'Drought': "Km2", 'Landslide': "Kph", 'Volcanic activity': "Kph", 'Epidemic': "Vaccinated", 'Insect infestation': "km2"
+    });
+    const [bardata, SetBarData] = useState(null);
 
     useEffect(() => {
         const getdisasterdata = async () => {
@@ -31,7 +37,7 @@ export default function ImpactSpider(props) {
                 }));
                 // console.log(disasterdata)
                 // SetDData(disasterdata);
-            
+
                 // Group data by Disaster Type and find maximum Dis Mag Value for each group
                 const maxDisMagValues = Array.from(d3.rollup(disasterdata,
                     g => d3.max(g, d => d["Magnitude"]),
@@ -53,7 +59,7 @@ export default function ImpactSpider(props) {
 
 
                 const magparts_type = magParts.filter(d => d[0] == type)
-                
+
                 SetMagParts(magparts_type)
                 // Remove the "Type" column from the average_type array
 
@@ -80,13 +86,13 @@ export default function ImpactSpider(props) {
                     v => ({
                         "Type": v[0]["Type"],
                         "Part": v[0]["part"],
-                        "Avg_Ttl_Deaths": d3.mean(v, d => d["Ttl_Deaths"]),
-                        "Avg_Ttl_Injured": d3.mean(v, d => d["Ttl_Injured"]),
-                        "Avg_Ttl_Affected": d3.mean(v, d => d["Ttl_Affected"]),
-                        "Avg_Ttl_Homeless": d3.mean(v, d => d["Ttl_Homeless"]),
-                        "Avg_Reconstruction_Cost": d3.mean(v, d => d["Reconstruction_Cost"]),
-                        "Avg_Insured_Damage": d3.mean(v, d => d["Insured_Damage"]),
-                        "Avg_Total_Damage": d3.mean(v, d => d["Total_Damage"])
+                        "Total Deaths": d3.mean(v, d => d["Ttl_Deaths"]),
+                        "Total Injured": d3.mean(v, d => d["Ttl_Injured"]),
+                        "Total Affected": d3.mean(v, d => d["Ttl_Affected"]),
+                        "Total Homeless": d3.mean(v, d => d["Ttl_Homeless"]),
+                        "Total Reconstruction Cost": d3.mean(v, d => d["Reconstruction_Cost"]),
+                        "Average Insured Damage": d3.mean(v, d => d["Insured_Damage"]),
+                        "Total Damage Incurred": d3.mean(v, d => d["Total_Damage"])
                     }),
                     d => d["Type"] + d.part,
                 ).values());
@@ -100,13 +106,13 @@ export default function ImpactSpider(props) {
                     return obj || {
                         "Type": type,
                         "Part": part,
-                        "Avg_Ttl_Deaths": 0,
-                        "Avg_Ttl_Injured": 0,
-                        "Avg_Ttl_Affected": 0,
-                        "Avg_Ttl_Homeless": 0,
-                        "Avg_Reconstruction_Cost": 0,
-                        "Avg_Insured_Damage": 0,
-                        "Avg_Total_Damage": 0
+                        "Total Deaths": 0,
+                        "Total Injured": 0,
+                        "Total Affected": 0,
+                        "Total Homeless": 0,
+                        "Total Reconstruction Cost": 0,
+                        "Average Insured Damage": 0,
+                        "Total Damage Incurred": 0
                     };
                 });
 
@@ -114,21 +120,22 @@ export default function ImpactSpider(props) {
 
                 // Remove the "Type" column from the average_type array
                 const average_type_without_type = average_type_with_zero.map(({ Type, ...rest }) => rest);
+                SetBarData(average_type_without_type)
                 const averages_type_without_type1 = average_type_without_type.map(d => {
                     const axes = [
-                        { axis: "Avg_Ttl_Deaths", value: d.Avg_Ttl_Deaths },
-                        { axis: "Avg_Ttl_Injured", value: d.Avg_Ttl_Injured },
-                        { axis: "Avg_Ttl_Affected", value: d.Avg_Ttl_Affected },
-                        { axis: "Avg_Ttl_Homeless", value: d.Avg_Ttl_Homeless },
-                        { axis: "Avg_Reconstruction_Cost", value: d.Avg_Reconstruction_Cost },
-                        { axis: "Avg_Insured_Damage", value: d.Avg_Insured_Damage },
-                        { axis: "Avg_Total_Damage", value: d.Avg_Total_Damage }
+                        { axis: "Total Deaths", value: d["Total Deaths"] },
+                        { axis: "Total Injured", value: d["Total Injured"] },
+                        { axis: "Total Affected", value: d["Total Affected"] },
+                        { axis: "Total Homeless", value: d["Total Homeless"] },
+                        { axis: "Total Reconstruction Cost (in $)", value: d["Total Reconstruction Cost"] },
+                        { axis: "Average Insured Damage (in $)", value: d["Average Insured Damage"] },
+                        { axis: "Total Damage Incurred (in $)", value: d["Total Damage Incurred"] }
                     ];
                     return [...axes];
                 });
 
 
-                // console.log(averages_type_without_type1);
+                console.log(averages_type_without_type1);
                 SetDData(averages_type_without_type1);
 
 
@@ -392,7 +399,7 @@ export default function ImpactSpider(props) {
                 .data(data)
                 .enter().append("g")
                 .attr("class", "radarCircleWrapper");
-
+            const formatter = d3.format(",.0f");
             //Append a set of invisible circles on top for the mouseover pop-up
             blobCircleWrapper.selectAll(".radarInvisibleCircle")
                 .data(function (d, i) { return d; })
@@ -431,7 +438,7 @@ export default function ImpactSpider(props) {
                     tooltip
                         .attr('x', newX)
                         .attr('y', newY)
-                        .text(Format((i.value / maxValueObj.value)))
+                        .text(formatter(i.value))
                         .transition().duration(200)
                         .style('opacity', 1);
                 })
@@ -449,7 +456,7 @@ export default function ImpactSpider(props) {
             /////////////////// Legend ///////////////////////////////
             /////////////////////////////////////////////////////////
             var legendData = [
-                {name : "Magnitude" , color:"#eee"},
+                { name: "Magnitude", color: "#eee" },
                 { name: `${magParts[0][3]} - ${magParts[0][4]} `, color: "#EDC951" },
                 { name: `${magParts[0][2]} - ${magParts[0][3]}`, color: "#CC333F" },
                 { name: `${magParts[0][1]} - ${magParts[0][2]}`, color: "#00A0B0" },
@@ -508,10 +515,88 @@ export default function ImpactSpider(props) {
                     }
                 });
             }//wrap	
+
+
+            /// bar chart 
+
         }
 
-        if (disasterdata && !graph) {
-            // console.log(disasterdata)
+        const Chart = (dataKey, color) => {
+            const margin = { top: 20, right: 200, bottom: 30, left: 60 };
+            const width = 300;
+            const height = 300;
+
+            const svg = d3.select(".barChart").append("svg")
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+            const x = d3.scaleBand()
+                .range([0, width])
+                .padding(0.1)
+                .domain(bardata.map(d => d.Part));
+
+            const y = d3.scaleLinear()
+                .range([height, 0])
+                .domain([0, d3.max(bardata, d => d[dataKey])]);
+
+            svg.append('g')
+                .attr('transform', `translate(0, ${height})`)
+                .call(d3.axisBottom(x));
+
+            svg.append('g')
+                .call(d3.axisLeft(y))
+                .append('text')
+                .attr('transform', 'rotate(-90)')
+                .attr('x', -height / 3)
+                .attr('y', -50)
+                .attr('fill', '#000')
+                .style('font-size', '14px')
+                .text(dataKey.charAt(0).toUpperCase() + dataKey.slice(1));
+
+            svg.selectAll('.bar')
+                .data(bardata)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => x(d.Part))
+                .attr('y', d => y(d[dataKey]))
+                .style("fill", function (d, i) {
+                    return color(i);
+                })
+                .attr('width', x.bandwidth())
+                .attr('height', d => height - y(d[dataKey]));
+
+            var legendData = [
+                { name: `${magParts[0][3]} - ${magParts[0][4]} `, color: "#EDC951" },
+                { name: `${magParts[0][2]} - ${magParts[0][3]}`, color: "#CC333F" },
+                { name: `${magParts[0][1]} - ${magParts[0][2]}`, color: "#00A0B0" },
+                { name: `0 - ${magParts[0][1]}`, color: "#8B008B" }
+            ];
+            var legend = svg.append("g")
+                .attr("class", "legend")
+                .attr("transform", "translate(" + (width + 30) + ", 20)");
+
+            var legendRect = legend.selectAll("rect")
+                .data(legendData)
+                .enter()
+                .append("rect")
+                .attr("x", 0)
+                .attr("y", function (d, i) { return i * 20; })
+                .attr("width", 10)
+                .attr("height", 10)
+                .style("fill", function (d) { return d.color; });
+
+            var legendText = legend.selectAll("text")
+                .data(legendData)
+                .enter()
+                .append("text")
+                .attr("x", 20)
+                .attr("y", function (d, i) { return i * 20 + 9; })
+                .text(function (d) { return d.name; });
+        }
+
+        if (disasterdata && bardata && !graph) {
             var margin = { top: 100, right: 100, bottom: 100, left: 100 },
                 width = Math.min(800, window.innerWidth - 10) - margin.left - margin.right,
                 height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
@@ -531,6 +616,19 @@ export default function ImpactSpider(props) {
             };
             //Call function to draw the Radar chart
             RadarChart(".radarChart", disasterdata, radarChartOptions);
+            // Remove the previously drawn SVG
+            console.log(d3.select('.barChart').select("svg"))
+            d3.select('.barChart').selectAll("svg").remove();
+
+            Chart("Total Deaths", color);
+
+            Chart("Total Injured", color)
+            Chart("Total Affected", color)
+            Chart("Total Homeless", color)
+            Chart("Total Reconstruction Cost", color)
+            Chart("Average Insured Damage", color)
+            Chart("Total Damage Incurred", color)
+
         }
     }, [disasterdata]);
 
@@ -561,9 +659,24 @@ export default function ImpactSpider(props) {
                 </div>
 
             </div>
+            <div>
+                Units of Magnitude is : {UnitArray[type]}
+            </div>
             <div className="chart-container">
                 <div className='radarChart'></div>
+
             </div>
+            <br />
+            <br />
+            <div >
+                Radar Chart was used here because it a multivariate data (though the chart is risky to use)
+            </div>
+
+            <div>
+                <div className='barChart'></div>
+            </div>
+            
+
         </div >
     );
 }
