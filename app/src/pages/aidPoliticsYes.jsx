@@ -3,6 +3,17 @@ import * as React from 'react';
 import './aidPolitics.css'
 import Loading from './loading';
 import {  useParams} from "react-router-dom";
+import Header from "../partials/Header";
+import worldImage from '../images/squares-world-new.jpg';
+
+// for the image
+const imgHeight = 736;
+const imgWidth = 1600;
+const scaleFactor = 1;
+const viewHeight = imgHeight*scaleFactor;
+const viewWidth = imgWidth*scaleFactor;
+
+const boxSize = 400;
 
 const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
 
@@ -29,11 +40,9 @@ export default function AidPoliticsYes(props) {
 
     React.useEffect(() => {
         const drawAidPolitics = () => {
-            var svg = d3.select('#svg-viz');
-            svg.selectAll('*').remove();
 
             var tooltip = d3
-                .select(".visual-div")
+                .select(".viz-div")
                 .append("div")
                 .style("opacity", 0)
                 .style("position", "absolute")
@@ -49,8 +58,6 @@ export default function AidPoliticsYes(props) {
             }
 
             var yesData = data.filter(d => d['Appeal'] === 'Yes' && checkDate(d));
-
-            console.log(yesData); 
 
             // getting set of continents
             const continentSet = new Set();
@@ -107,60 +114,82 @@ export default function AidPoliticsYes(props) {
                 .domain([minAmt - 100, maxAmt + 100])
                 .range([20, 60]);
 
-            var node = svg.append("g")
-                .selectAll("circle")
-                .data(countryArray)
-                .enter()
-                .append("circle")
-                .attr("class", "country-circle")
-                .attr("id", d => d['Country']+'-'+d['Aid'])
-                .attr("cx", width / 2)
-                .attr("cy", height / 2)
-                .attr("r", d => {
-                    if (d['Aid'] === 0){
-                        return 10;
-                    }
-                    return size(d['Aid'])
-                })
-                .style("fill", d => { 
-                    return color(d['Continent'])
-                })
-                .style("fill-opacity", 0.8)
-                .attr("stroke", "black")
-                .style("stroke-width", 0.6)
-                .on("mouseover", function (e, d) {
-                    tooltip.style("opacity", 1);
-                  })
-                .on("mousemove", function (e, d) {  
-                    const countryName = e.currentTarget.id.split('-')[0];
-                    const aidAmount = e.currentTarget.id.split('-')[1];
-                    var toolTipStr = 
-                        aidAmount > 0 ? `${countryName} received ${aidAmount}000 USD in aid`
-                        : `${countryName} received no recorded aid`;
-                    tooltip
-                      .html(toolTipStr)
-                      .style("left", e.pageX + 20 + "px")
-                      .style("top", e.pageY + "px");
-                  })
-                  .on("mouseout", function (e, d) {
-                    tooltip.style("opacity", 0);
-                  });
+            let USDollar = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+            });
 
-            var simulation = d3.forceSimulation()
-                .force("center", d3.forceCenter().x(width / 2).y(height / 2))
-                .force("charge", d3.forceManyBody().strength(.1))
-                .force("collide", d3.forceCollide().strength(.2).radius( d => { return (size(d['Aid']) + 4) }).iterations(1))
+            continentArray.forEach(continent => {
+                console.log(continent);
+                const curArray = countryArray.filter(d => d.Continent === continent);
+                console.log(curArray);
 
-            simulation
-                .nodes(countryArray)
-                .on("tick", function(d){
-                  node
-                      .attr("cx", d => d.x)
-                      .attr("cy", d => d.y)
-                });
+                d3.select(`#id`+continent).remove();
+                const svg = d3.select(`#${continent}`).append('svg')
+                    .attr('width', boxSize)
+                    .attr('height', boxSize)
+                    .attr("transform", `translate(${-boxSize/2},${-boxSize/2})`)
+                    .attr('id', 'id'+continent);
 
-            svg = d3.select('#legend-viz');
-            svg.selectAll('*').remove();
+                var node = svg
+                    .selectAll("circle")
+                    .data(curArray)
+                    .enter()
+                    .append("circle")
+                    .attr("class", "country-circle")
+                    .style('z-index', 6)
+                    .attr("cx", width / 2)
+                    .attr("cy", height / 2)
+                    .attr("id", d => d['Country']+'-'+d['Aid'])
+                    .attr("r", d => {
+                        if (d['Aid'] === 0){
+                            return 10;
+                        }
+                        return size(d['Aid'])
+                    })
+                    .style("fill", d => { 
+                        return color(d['Continent'])
+                    })
+                    .style("fill-opacity", 0.8)
+                    .attr("stroke", "black")
+                    .style("stroke-width", 0.6)
+                    .on("mouseover", function (e, d) {
+                        tooltip.style("opacity", 1);
+                      })
+                    .on("mousemove", function (e, d) {  
+                        const countryName = e.currentTarget.id.split('-')[0];
+                        const aidAmount = e.currentTarget.id.split('-')[1]*1000;
+                        var toolTipStr = 
+                            aidAmount > 0 ? `${countryName} received ${USDollar.format(aidAmount)} in aid`
+                            : `${countryName} received no recorded aid`;
+                        tooltip
+                          .html(toolTipStr)
+                          .style("left", e.pageX + 20 + "px")
+                          .style("top", e.pageY + "px");
+                      })
+                      .on("mouseout", function (e, d) {
+                        tooltip.style("opacity", 0);
+                      });
+
+                var simulation = d3.forceSimulation()
+                    .force("center", d3.forceCenter().x(boxSize / 2).y(boxSize / 2))
+                    .force("charge", d3.forceManyBody().strength(.1))
+                    .force("collide", d3.forceCollide().strength(.2).radius( d => { return (size(d['Aid']) + 4) }).iterations(1))
+
+                simulation
+                    .nodes(curArray)
+                    .on("tick", function(d){
+                      node
+                          .attr("cx", d => d.x)
+                          .attr("cy", d => d.y)
+                    });
+            })
+
+            d3.select('#legend-svg').remove();
+            const svg = d3.select('#legend-viz').append('svg')
+                .attr('width', boxSize)
+                .attr('height', boxSize)
+                .attr('id', 'legend-svg');
 
             svg.selectAll("legend-circle")
                 .data(continentArray)
@@ -197,9 +226,9 @@ export default function AidPoliticsYes(props) {
 
     return (
         <>
+            <Header />
             <main
                 style={{
-                height: "100vh",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -208,21 +237,103 @@ export default function AidPoliticsYes(props) {
             >
                 <p
                 id="vineeth_heading"
+                style={{
+                    marginTop:'100px'
+                }}
                 >
                     International Aid Visualization: Countries which appealed for international aid
                 </p>
-                <div className="visual-div">
-                    <div className="svg-div2">
-                        <svg id="svg-viz" width={width + margin.left + margin.right} height={height + margin.top + margin.bottom}>
-                        </svg>
-                        <svg id="legend-viz" width={width/3 + margin.left + margin.right} height={height + margin.top + margin.bottom}>
-                        </svg>
-                    </div>
-                </div>
 
-                <p>
-                    Hover over circle to see aid received.
-                </p>
+                <div className="viz-div"
+                    style={{
+                        marginTop:'30px',
+                        width:`${viewWidth}px`,
+                        height:`${viewHeight}px`,
+                    }}
+                >
+
+                    <div id='Asia'
+                        style={{
+                            position:'absolute',
+                            marginLeft:`${viewWidth*0.76}px`,
+                            marginTop:`${viewHeight*0.21}px`,
+                            zIndex: 5,
+                            width:1,
+                            height:1,
+                        }}
+                    >
+                    </div>
+
+                    <div id='Africa'
+                        style={{
+                            position:'absolute',
+                            marginLeft:`${viewWidth*0.53}px`,
+                            marginTop:`${viewHeight*0.81}px`,
+                            zIndex: 5,
+                            width:1,
+                            height:1,
+                        }}
+                    >
+                    </div>
+
+                    <div id='Oceania'
+                        style={{
+                            position:'absolute',
+                            marginLeft:`${viewWidth*0.81}px`,
+                            marginTop:`${viewHeight*0.72}px`,
+                            zIndex: 5,
+                            width:1,
+                            height:1,
+                        }}
+                    >
+                        
+                    </div>
+
+                    <div id='Europe'
+                        style={{
+                            position:'absolute',
+                            marginLeft:`${viewWidth*0.49}px`,
+                            marginTop:`${viewHeight*0.27}px`,
+                            zIndex: 5,
+                            width:1,
+                            height:1,
+                        }}
+                    >
+                        
+                    </div>
+
+                    <div id='Americas'
+                        style={{
+                            position:'absolute',
+                            marginLeft:`${viewWidth*0.2}px`,
+                            marginTop:`${viewHeight*0.5}px`,
+                            zIndex: 5,
+                            width:1,
+                            height:1,
+                        }}
+                    >
+                        
+                    </div>
+
+                    <div id='legend-viz'
+                        style={{
+                            position:'absolute',
+                            marginLeft:`${viewWidth*0.86}px`,
+                            marginTop:`${viewHeight*0.18}px`,
+                            zIndex: 5,
+                            width:1,
+                            height:1,
+                        }}
+                    >
+                        
+                    </div>
+                    
+
+
+                    <img className="h-full w-full opacity-50" 
+                    src={worldImage} alt="Hero" />
+
+                </div>
             </main>
         </>
     );
