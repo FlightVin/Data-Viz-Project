@@ -2,7 +2,6 @@ import * as d3 from "d3";
 import * as React from 'react';
 import Loading from './loading';
 import Header from "../partials/Header";
-import curData from "./data.json";
 
 const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
 
@@ -14,6 +13,13 @@ export default function AssociatedDisaster(props) {
         setTimeout(() => {
             d3.csv(datasetLink)
                 .then(res => {
+                    const retData = {
+                        name:'natural',
+                        children: [
+
+                        ]
+                    };
+
                     const disasterData = [];
                     res.forEach(d => {
                         disasterData.push({
@@ -23,9 +29,83 @@ export default function AssociatedDisaster(props) {
                         })
                     })
 
-                    // console.log(disasterData);
+                    const type1Set = new Set();
+                    disasterData.forEach(d => {
+                        type1Set.add(d.type1);
+                    })
+                    const type1Array = [];
+                    type1Set.forEach(d => {
+                        type1Array.push(d);
+                    })
 
-                    setData(curData);
+                    // first level of data
+                    type1Array.forEach(type1Dis => {
+
+                        const pushVal = {
+                            name: type1Dis,
+                            children: [],
+                        }
+
+                        const type2Set = new Set();
+                        disasterData.forEach(d => {
+                            if (d.type1 === type1Dis){
+                                type2Set.add(d.type2 === '' ? 'No subsequent disasters' : d.type2);
+                            }
+                        })
+                        const type2Array = [];
+                        type2Set.forEach(d => {
+                            type2Array.push(d);
+                        })
+
+                        // 2nd level of data
+                        type2Array.forEach(type2Dis => {
+                            const type2Obj = {
+                                name: type2Dis,
+                                children: [],
+                            }
+
+                            const type3Set = new Set();
+                            disasterData.forEach(d => {
+                                if (d.type1 === type1Dis && d.type2 === type2Dis){
+                                    type3Set.add(d.type3 === '' ? 'No subsequent disasters' : d.type3);
+                                }
+                            })
+                            const type3Array = [];
+                            type3Set.forEach(d => {
+                                type3Array.push(d);
+                            })
+
+                            // 3rd level of data
+                            type3Array.forEach(type3Dis => {
+                                const type3Obj = {
+                                    name: type3Dis,
+                                    value: 0,
+                                }
+
+                                disasterData.forEach(d => {
+                                    const type1Name = type1Dis;
+                                    const type2Name = type2Dis === 'No subsequent disasters' ? '' : type2Dis;
+                                    const type3Name = type3Dis === 'No subsequent disasters' ? '' : type3Dis;
+
+                                    if (d.type1 === type1Name 
+                                        && d.type2 === type2Name
+                                        && d.type3 === type3Name){
+                                            type3Obj.value++;
+                                        }
+                                })
+
+                                type2Obj.children.push(type3Obj);
+                            })
+
+                            pushVal.children.push(type2Obj)
+                        })
+
+                        retData.children.push(pushVal);
+                    })
+
+                    console.log(retData);
+
+                    setData(retData);
                     setLoading(false);
                 })
         }, 1000);
@@ -160,11 +240,7 @@ export default function AssociatedDisaster(props) {
             }
 
             const ele = chart();
-            console.log(ele);
-
             const parent = document.getElementById('viz-div');
-            console.log(parent);
-
             parent.appendChild(ele);
         }
 
@@ -190,22 +266,23 @@ export default function AssociatedDisaster(props) {
                 }}
             >
 
-
-                <div id='viz-div'
-                    style={{
-                        width: '1000px',
-                        marginTop:'100px'
-                    }}>
-
-                </div>
                 <p
-                style={{
-                    marginTop:'30px'
-                }}
+                    style={{
+                        marginTop:'100px'
+                    }}
                 id="vineeth_heading"
                 >
                     Associated Disasters: Disasters that lead to other disasters
                 </p>
+
+                <div id='viz-div'
+                    style={{
+                        width: '900px',
+                        marginTop:'30px'
+                    }}>
+
+                </div>
+
             </main>
         </>
     );

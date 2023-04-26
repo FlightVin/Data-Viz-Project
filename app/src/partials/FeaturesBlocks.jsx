@@ -2,7 +2,8 @@ import React from 'react';
 
 import TreeImage from '../images/tidy-chart.png';
 import RadarImage from '../images/radar-chart.png';
-import SankeyImage from '../images/sankey-chart.png'
+import SankeyImage from '../images/sankey-chart.png';
+import SunburstImage from '../images/sunburst-plot.png';
 import { Link } from 'react-router-dom';
 
 function FeaturesBlocks() {
@@ -79,7 +80,7 @@ function FeaturesBlocks() {
             {/* 5th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
               <Link to="/associated-disaster">
-              <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
+              <img className="mx-auto h-52" src={SunburstImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Associated disasters</h4>
               </Link>
               <p className="text-gray-600 text-center">Sunburst chart</p>
