@@ -1,5 +1,3 @@
-// assigned to Anush
-
 import * as d3 from 'd3';
 import { useEffect, useState, useRef } from "react";
 import Select from 'react-select'
@@ -17,6 +15,7 @@ export default function ImpactSpider(props) {
     const [UnitArray, SetUnitArray] = useState({
         'Earthquake': "Richter", 'Wildfire': "Km2", 'Flood': "Km2", 'Storm': "Kph", 'Extreme temperature ': "°C", 'Drought': "Km2", 'Landslide': "Kph", 'Volcanic activity': "Kph", 'Epidemic': "Vaccinated", 'Insect infestation': "km2"
     });
+    const [clicked, SetClick] = useState(null)
     const [bardata, SetBarData] = useState(null);
 
     useEffect(() => {
@@ -35,6 +34,7 @@ export default function ImpactSpider(props) {
                     "Total_Damage": +d["Total Damages ('000 US$)"],
                     "CPI": +d["CPI"]
                 }));
+                
                 // console.log(disasterdata)
                 // SetDData(disasterdata);
 
@@ -290,6 +290,8 @@ export default function ImpactSpider(props) {
                 .attr("y", function (d, i) { return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - Math.PI / 2); })
                 .text(function (d) { return d })
                 .call(wrap, cfg.wrapWidth);
+
+
             //// lines
             /////////////////////////////////////////////////////////
             ///////////// Draw the radar chart blobs ////////////////
@@ -520,39 +522,62 @@ export default function ImpactSpider(props) {
             /// bar chart 
 
         }
+        const Chart1 = (dataKey, color, type) => {
 
-        const Chart = (dataKey, color) => {
             const margin = { top: 20, right: 200, bottom: 30, left: 60 };
             const width = 300;
             const height = 300;
 
-            const svg = d3.select(".barChart").append("svg")
+            const svg = d3.select(".barChart1").append("svg")
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
+                .style("position", "absolute")
+                .style("top", "200px")
+                .style("left", "0px")
                 .append('g')
                 .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
+            var tooltip = d3
+                .select(".example-container")
+                .append("div")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("background-color", "white")
+                .style("border", "solid")
+                .style("border-width", "2px")
+                .style("border-radius", "5px")
+                .style("padding", "5px");
             const x = d3.scaleBand()
                 .range([0, width])
                 .padding(0.1)
                 .domain(bardata.map(d => d.Part));
 
-            const y = d3.scaleLinear()
+            const y = d3.scaleLog()
                 .range([height, 0])
-                .domain([0, d3.max(bardata, d => d[dataKey])]);
+                .domain([1, d3.max(bardata, d => d[dataKey])]);
 
             svg.append('g')
                 .attr('transform', `translate(0, ${height})`)
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x))
+                .append("text")
+                .attr("y", 25)
+                .attr("x", width / 1.25)
+                .attr("font-size", "14px")
+                .attr("text-anchor", "end")
+                .attr("fill", "black")
+                .text("Magnitude Parts(defined in legend)");
 
             svg.append('g')
                 .call(d3.axisLeft(y))
-                .append('text')
-                .attr('transform', 'rotate(-90)')
-                .attr('x', -height / 3)
-                .attr('y', -50)
-                .attr('fill', '#000')
-                .style('font-size', '14px')
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 20)
+                .attr("font-size", "14px")
+                .attr("x", -height / 2.5)
+                .attr("dy", "-4em")
+                .attr("text-anchor", "end")
+                .attr("fill", "black")
                 .text(dataKey.charAt(0).toUpperCase() + dataKey.slice(1));
 
             svg.selectAll('.bar')
@@ -564,8 +589,26 @@ export default function ImpactSpider(props) {
                 .style("fill", function (d, i) {
                     return color(i);
                 })
+                .on("mouseover", function () {
+                    tooltip.style("opacity", 1);
+                })
+                // Add mouseover event to circles
+                .on("mousemove", function (event, d) {
+                    d3.select(this).attr("r", 10);
+                    tooltip
+                        .style("left", event.pageX + 20 + "px")
+                        .style("top", event.pageY + "px")
+                        .html(
+                            `<div>${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}: ${d[dataKey]}</div>`
+                        )
+                        .attr("font-size", "10px");
+                })
+                .on("mouseout", function () {
+                    d3.select(this).attr("r", 8);
+                    tooltip.style("opacity", 0);
+                })
                 .attr('width', x.bandwidth())
-                .attr('height', d => height - y(d[dataKey]));
+                .attr('height', d => height - y(d[dataKey]))
 
             var legendData = [
                 { name: `${magParts[0][3]} - ${magParts[0][4]} `, color: "#EDC951" },
@@ -573,27 +616,160 @@ export default function ImpactSpider(props) {
                 { name: `${magParts[0][1]} - ${magParts[0][2]}`, color: "#00A0B0" },
                 { name: `0 - ${magParts[0][1]}`, color: "#8B008B" }
             ];
-            var legend = svg.append("g")
-                .attr("class", "legend")
-                .attr("transform", "translate(" + (width + 30) + ", 20)");
 
-            var legendRect = legend.selectAll("rect")
-                .data(legendData)
-                .enter()
-                .append("rect")
-                .attr("x", 0)
-                .attr("y", function (d, i) { return i * 20; })
-                .attr("width", 10)
-                .attr("height", 10)
-                .style("fill", function (d) { return d.color; });
+        }
 
-            var legendText = legend.selectAll("text")
-                .data(legendData)
-                .enter()
+
+        const Chart = (dataKey, color, type) => {
+            const margin = { top: 20, right: 200, bottom: 30, left: 60 };
+            const width = 20;
+            const height = 20;
+            //If the supplied maxValue is smaller than the actual one, replace by the max in the data
+            var maxValue = d3.max(disasterdata, function (i) { return d3.max(i.map(function (o) { return o.value; })) });
+
+            //Scale for the radius
+            var rScale = d3.scaleLinear()
+                .range([0, 150])
+                .domain([0, maxValue]);
+
+            const svg = d3.select(".barChart").append("svg")
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+
+            const angleSlice = Math.PI * 2 / 7;
+            if (type == 0) {
+                svg.style('position', 'absolute')
+                    .style('top', 305 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
+                    .style('left', 765 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
+                    .append('g')
+                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            }
+            else if (type == 1) {
+                svg.style('position', 'absolute')
+                    .style('top', 365 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
+                    .style('left', 895 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
+                    .append('g')
+                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            }
+            else if (type == 2) {
+                svg.style('position', 'absolute')
+                    .style('top', 515 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
+                    .style('left', 925 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
+                    .append('g')
+                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            }
+            else if (type == 3) {
+                svg.style('position', 'absolute')
+                    .style('top', 605 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
+                    .style('left', 895 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
+                    .append('g')
+                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            }
+            else if (type == 4) {
+                svg.style('position', 'absolute')
+                    .style('top', 605 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
+                    .style('left', 745 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
+                    .append('g')
+                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            }
+            else if (type == 5) {
+                svg.style('position', 'absolute')
+                    .style('top', 545 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
+                    .style('left', 605 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
+                    .append('g')
+                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            }
+            else if (type == 6) {
+                svg.style('position', 'absolute')
+                    .style('top', 285 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
+                    .style('left', 625 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
+                    .append('g')
+                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            }
+
+            var tooltip = d3
+                .select(".example-container")
+                .append("div")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("background-color", "white")
+                .style("border", "solid")
+                .style("border-width", "2px")
+                .style("border-radius", "5px")
+                .style("padding", "5px");
+
+            const x = d3.scaleBand()
+                .range([0, width])
+                .padding(0.1)
+
+                .domain(bardata.map(d => d.Part));
+
+            const y = d3.scaleLog()
+                .range([height, 0])
+                .domain([1, d3.max(bardata, d => d[dataKey])]);
+
+            svg.append('g')
+                .attr('transform', `translate(0, ${height})`)
+                .call(d3.axisBottom(x))
                 .append("text")
-                .attr("x", 20)
-                .attr("y", function (d, i) { return i * 20 + 9; })
-                .text(function (d) { return d.name; });
+                .attr("y", 27)
+                .attr("x", width / 1.2)
+                .attr("text-anchor", "end")
+                .attr("fill", "black")
+                .attr("font-size", width / 10 + "px")
+                .text("Magnitude Parts(defined in legend)");
+
+            svg.append('g')
+                .call(d3.axisLeft(y))
+                .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 10)
+                .attr("x", -height / 2.5)
+                .attr("dy", "-4em")
+                .attr("text-anchor", "end")
+                .attr("fill", "black")
+                .attr("font-size", width / 10 + "px")
+                .text(dataKey.charAt(0).toUpperCase() + dataKey.slice(1));
+
+            svg.selectAll('.bar')
+                .data(bardata)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => x(d.Part))
+                .attr('y', d => y(d[dataKey]))
+                .style("fill", function (d, i) {
+                    return color(i);
+                })
+                .on("mouseover", function () {
+                    tooltip.style("opacity", 1);
+                })
+                // Add mouseover event to circles
+                .on("mousemove", function (event, d) {
+                    d3.select(this).attr("r", 10);
+                    tooltip
+                        .style("left", event.pageX + 20 + "px")
+                        .style("top", event.pageY + "px")
+                        .html(
+                            `<div>${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}: ${d[dataKey]}</div>`
+                        )
+                        .attr("font-size", "10px");
+                })
+                .on("mouseout", function () {
+                    d3.select(this).attr("r", 8);
+                    tooltip.style("opacity", 0);
+                })
+                .on("click", function () {
+                    d3.select('.barChart1').selectAll("svg").remove();
+                    if (clicked != type) {
+                        Chart1(dataKey, color, type);
+                    }
+                    SetClick(type)
+                    console.log(clicked)
+
+                })
+                .attr('width', x.bandwidth())
+                .attr('height', d => height - y(d[dataKey]));
         }
 
         if (disasterdata && bardata && !graph) {
@@ -620,14 +796,14 @@ export default function ImpactSpider(props) {
             console.log(d3.select('.barChart').select("svg"))
             d3.select('.barChart').selectAll("svg").remove();
 
-            Chart("Total Deaths", color);
+            Chart("Total Deaths", color, 0);
 
-            Chart("Total Injured", color)
-            Chart("Total Affected", color)
-            Chart("Total Homeless", color)
-            Chart("Total Reconstruction Cost", color)
-            Chart("Average Insured Damage", color)
-            Chart("Total Damage Incurred", color)
+            Chart("Total Injured", color, 1)
+            Chart("Total Affected", color, 2)
+            Chart("Total Homeless", color, 3)
+            Chart("Total Reconstruction Cost", color, 4)
+            Chart("Average Insured Damage", color, 5)
+            Chart("Total Damage Incurred", color, 6)
 
         }
     }, [disasterdata]);
@@ -674,9 +850,11 @@ export default function ImpactSpider(props) {
 
             <div>
                 <div className='barChart'></div>
+                <div className='barChart1'></div>
             </div>
-            
+
 
         </div >
     );
 }
+
