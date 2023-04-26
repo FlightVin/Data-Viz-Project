@@ -111,7 +111,7 @@ function FeaturesBlocks() {
             {/* 7th item */}
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
             data-aos="fade-up" data-aos-delay="450">
-              <Link to="/">
+              <Link to="/decadal-deaths">
               <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Emergency Declaration</h4>
               </Link>
