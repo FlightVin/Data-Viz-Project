@@ -31,7 +31,7 @@ export default function GeoDistro(props) {
   let fuse;
 
   var tooltip = d3
-    .select("body")
+    .select(".geodistro-div")
     .append("div")
     .style("opacity", 0)
     .style("position", "absolute")
@@ -45,7 +45,6 @@ export default function GeoDistro(props) {
   // https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json
   React.useEffect(() => {
     setTimeout(() => {
-      console.log("bhadve");
       d3.json(
         "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"
       ).then(function (d) {
@@ -90,13 +89,13 @@ export default function GeoDistro(props) {
 
     fuse = new Fuse(countriesList, { keys: ["country"], includeScore: true });
 
-    const width = 1000;
-    const height = 700;
+    const width = 1200;
+    const height = 1000;
 
     const projection = d3
       .geoMercator()
       .translate([width / 2, height / 1.4])
-      .scale([150]);
+      .scale([180]);
 
     const path = d3.geoPath().projection(projection);
 
@@ -106,6 +105,30 @@ export default function GeoDistro(props) {
     svg.attr("width", width).attr("height", height).append("g");
 
     const countries = topojson.feature(worldMap, worldMap.objects.countries);
+
+    const colors = ["green", "yellow", "orange", "red"];
+    const eventsArray = [
+      "Not Disaster Prone",
+      "Less Prone to Disasters",
+      "Moderately Disaster Prone",
+      "Highly Disaster Prone",
+    ];
+
+    for (var i = 0; i < colors.length; i++) {
+      svg
+        .append("rect")
+        .attr("x", "900")
+        .attr("y", (2 + 50 * i).toString())
+        .attr("width", "20")
+        .attr("height", "20")
+        .attr("fill", colors[i]);
+
+      svg
+        .append("text")
+        .attr("x", "930")
+        .attr("y", (2 + 50 * i + 16).toString())
+        .text(eventsArray[i]);
+    }
 
     svg
       .selectAll("path")
@@ -128,7 +151,7 @@ export default function GeoDistro(props) {
         }
 
         if (disasterDataMap.get(countryName) == null) {
-          return "white";
+          return "green";
         } else if (
           disasterDataMap.get(countryName) / (value1[1] - value1[0] + 1) <
           2
@@ -184,27 +207,18 @@ export default function GeoDistro(props) {
           vval = 0;
         }
 
-        console.log(d);
         tooltip
-          .html(`No of occurrences of this disaster : ${vval}`)
+          .html(
+            `Country: ${countryName}
+             <br>
+             No of occurrences of this disaster : ${vval}`
+          )
           .style("left", e.pageX + 20 + "px")
           .style("top", e.pageY + "px");
       })
       .on("mouseout", function (e, d) {
         tooltip.style("opacity", 0);
       });
-    let zoom = d3
-      .zoom()
-      .scaleExtent([1, 1.4])
-      .translateExtent([
-        [-400, -100],
-        [1350, 500],
-      ])
-      .on("zoom", (ev) => {
-        svg.attr("transform", ev.transform);
-      });
-
-    svg.call(zoom);
   };
 
   const handleOptionChange = (event) => {
