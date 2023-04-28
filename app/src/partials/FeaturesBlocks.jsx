@@ -7,7 +7,7 @@ import SunburstImage from '../images/sunburst-plot.png';
 import VineethImage from '../images/vineeth.jpg';
 import worldImage from '../images/world-map.jpeg';
 import barImage from '../images/bar-chart.png';
-import AnushImage from '../images/anush.png';
+import AnushImage from '../images/anush.jpg';
 import impactImage from '../images/impact-chart.png';
 import MitanshImage from '../images/mitansh.png';
 import { Link } from 'react-router-dom';
