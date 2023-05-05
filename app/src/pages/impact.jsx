@@ -17,7 +17,6 @@ export default function ImpactSpider(props) {
     "Landslide",
     "Volcanic activity",
     "Epidemic",
-    "Insect infestation",
   ]);
   const [UnitArray, SetUnitArray] = useState({
     'Earthquake': "Richter", 'Wildfire': "Km2", 'Flood': "Km2", 'Storm': "Kph", 'Extreme temperature ': "°C", 'Drought': "Km2", 'Landslide': "Kph", 'Volcanic activity': "Kph", 'Epidemic': "Vaccinated", 'Insect infestation': "km2"
@@ -92,29 +91,30 @@ export default function ImpactSpider(props) {
       console.log(magnitudes.length);
 
       var cfg = {
-        w: magnitudes.length * 15, //Width of the graph
+        w: 1500, //Width of the graph
         h: 1000, // height of graph
         margin: { top: 20, right: 50, bottom: 100, left: 100 }, //The margins of the SVG
       };
-      if (cfg.w < 1200) {
-        cfg.w = 1200;
-      }
+      // if (cfg.w < 1200) {
+      //   cfg.w = 1200;
+      // }
       console.log(disasterdata);
+
+      // console.log(d3.max(disasterdata, (d) => d.totalCount))
 
       const yScale = d3
         .scaleLinear()
         .domain([0, d3.max(disasterdata, (d) => d.totalCount)])
         .range([cfg.h, 0]); // adjust the range as per your requirement
+
+      // magnitudes = []
       // Set up x-axis scale
-      magnitudes.push(d3.max(disasterdata, (d) => d.magnitude) + 1);
-      const xScale = d3
-        .scalePoint()
-        .domain(
-          magnitudes.map(function (d) {
-            return d;
-          })
-        )
-        .range([0, cfg.w]);
+
+      const xScale = d3.scaleBand().range([0, cfg.w]).padding(0.6).domain(
+        magnitudes.map(function (d) {
+          return d;
+        })
+      )
 
       // Remove whatever chart with the same id/class was present before
       d3.select("#my_dataviz").select("svg").remove();
@@ -122,7 +122,7 @@ export default function ImpactSpider(props) {
       var svg = d3
         .select("#my_dataviz")
         .append("svg")
-        .attr("width", cfg.w + cfg.margin.left + cfg.margin.right)
+        .attr("width", cfg.w + cfg.margin.left)
         .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
         .append("g")
         .attr(
@@ -131,8 +131,8 @@ export default function ImpactSpider(props) {
         );
 
       // Create and render x and y axis
-      const xAxis = d3.axisBottom(xScale).tickSize(0);
-      const yAxis = d3.axisLeft(yScale);
+      const xAxis = d3.axisBottom(xScale);
+
 
       svg
         .append("g")
@@ -142,7 +142,23 @@ export default function ImpactSpider(props) {
         )
         .call(xAxis);
 
-      svg.selectAll("text").attr("transform", "translate(20,0)");
+      // svg.selectAll("text").attr("transform", "translate(20,0)");
+
+      const yAxis = d3.axisLeft(yScale)
+        .tickSize(4)
+        .ticks(10)
+      // .tickFormat(d3.max(disasterdata, (d) => d.totalCount)); // Set the tick label format to an empty string
+
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          "translate(" + cfg.margin.left + "," + (cfg.margin.top - 20) + ")"
+        )
+        .call(yAxis)
+        .selectAll("text")
+        .attr("font-size", "10px");
+
 
       var tooltip = d3
         .select(".example-container")
@@ -156,90 +172,96 @@ export default function ImpactSpider(props) {
         .style("border-radius", "5px")
         .style("padding", "5px");
 
-      svg
-        .append("g")
-        .attr(
-          "transform",
-          "translate(" + cfg.margin.left + "," + (cfg.margin.top - 20) + ")"
-        )
-        .call(yAxis)
-        .selectAll("text")
-        .attr("font-size", "16px");
+      // var stackGen = d3.stack().keys();
 
-      // Create a group element to hold the circles
-      const circlesGroup = svg.append("g");
-      var p = 0;
-      // Create a loop to append the circles
-      for (let j = 0; j < disasterdata.length; j++) {
-        const x = disasterdata[j]["magnitude"];
-        const yescount = disasterdata[j]["yesCount"];
-        const nocount = disasterdata[j]["noCount"];
-        for (let i = 0; i < yescount; i++) {
-          circlesGroup
-            .append("circle")
-            .attr("cx", xScale(x) + cfg.margin.left + 20) // set the x position
-            .attr("cy", yScale(i) + cfg.margin.top - 24) // set the y position
-            .attr("r", 8) // set the radius
-            .style("fill", "green") // set the fill color
-            .style("opacity", "0.7")
-            .on("mouseover", function () {
-              tooltip.style("opacity", 1);
-            })
-            // Add mouseover event to circles
-            .on("mousemove", function (event, d) {
-              d3.select(this).attr("r", 10);
-              tooltip
-                .style("left", event.pageX + 20 + "px")
-                .style("top", event.pageY + "px")
-                .html(
-                  `Magnitude: ${x}` +
-                  "</br>" +
-                  `Emergency declared:${yescount}` +
-                  "</br>" +
-                  `Not Declared: ${nocount}` +
-                  "</br>" +
-                  `Total Occurrences: ${yescount + nocount}`
-                )
-                .attr("font-size", "10px");
-            })
-            .on("mouseout", function () {
-              d3.select(this).attr("r", 8);
-              tooltip.style("opacity", 0);
-            });
-        }
-        for (let i = 0; i < nocount; i++) {
-          circlesGroup
-            .append("circle")
-            .attr("cx", xScale(x) + cfg.margin.left + 20) // set the x position
-            .attr("cy", yScale(i + yescount) + cfg.margin.top - 24) // set the y position
-            .attr("r", 8) // set the radius
-            .style("fill", "red") // set the fill color
-            .style("opacity", "0.7")
-            .on("mouseover", function () {
-              tooltip.style("opacity", 1);
-            })
-            .on("mousemove", function (event, d) {
-              d3.select(this).attr("r", 10);
-              tooltip
-                .style("left", event.pageX + 20 + "px")
-                .style("top", event.pageY + "px")
-                .html(
-                  `Magnitude: ${x}` +
-                  "</br>" +
-                  `Emergency declared: ${yescount}` +
-                  "</br>" +
-                  `Not Declared: ${nocount}` +
-                  "</br>" +
-                  `Total Occurrences: ${yescount + nocount}`
-                )
-                .attr("font-size", "10px");
-            })
-            .on("mouseout", function () {
-              d3.select(this).attr("r", 8);
-              tooltip.style("opacity", 0);
-            });
-        }
+      console.log(disasterdata);
+
+      // var magnitudes = [];
+
+      // for (var i = 0; i < disasterdata.length; i++) {
+      //   magnitudes.push(disasterdata[i].magnitude + 1);
+      // }
+
+      // console.log("disasterdata",disasterdata)
+
+      console.log(magnitudes)
+
+      var stackGen = d3.stack().keys(["yesCount", "noCount"]);
+
+      var data_viz = [];
+
+      for (var k = 0; k < magnitudes.length; k++) {
+
+        console.log(k, disasterdata[k])
+        var data_mag = {
+          magnitude: magnitudes[k],
+          yesCount: disasterdata[k].yesCount,
+          noCount: disasterdata[k].noCount
+        };
+
+        data_viz.push(data_mag);
       }
+
+      console.log(data_viz)
+      const final_data = stackGen(data_viz)
+
+      var colorScale = d3
+        .scaleOrdinal()
+        .domain(["yesCount", "noCount"])
+        .range(["Green", "Red"]);
+
+      console.log("Finaaalll data", final_data);
+
+      var sel = d3
+        .select("g")
+        .selectAll("g.series")
+        .data(final_data)
+        .join("g")
+        .classed("series", true)
+        .style("fill", (d) => {
+          return colorScale(d.key);
+        });
+
+      sel
+        .selectAll("rect")
+        .data((d) => {
+          return d;
+        })
+        .join("rect")
+        .attr("width", xScale.bandwidth())
+        .attr("y", (d) => {
+          return Math.min(yScale(d[1]), yScale(d[0]));
+        })
+        .attr("x", (d) => {
+          return xScale(d.data.magnitude) + cfg.margin.left;
+        })
+        .attr("height", (d) => {
+          return Math.abs(yScale(d[1]) - yScale(d[0]));
+        })
+        .on("mouseover", function () {
+          tooltip.style("opacity", 1);
+        })
+        // Add mouseover event to circles
+        .on("mousemove", function (event, d) {
+          console.log(d);
+          tooltip
+            .style("left", event.pageX + 20 + "px")
+            .style("top", event.pageY + "px")
+            .html(
+              `Magnitude: ${d.data.magnitude}` +
+              "</br>" +
+              `Emergency declared:${d.data.yesCount}` +
+              "</br>" +
+              `Not Declared: ${d.data.noCount}` +
+              "</br>" +
+              `Total Occurrences: ${d.data.yesCount + d.data.noCount}`
+            )
+            .attr("font-size", "10px");
+        })
+        .on("mouseout", function () {
+          d3.select(this).attr("r", 8);
+          tooltip.style("opacity", 0);
+        });
 
 
 
