@@ -34,7 +34,7 @@ export default function ImpactSpider(props) {
                     "Total_Damage": +d["Total Damages ('000 US$)"],
                     "CPI": +d["CPI"]
                 }));
-                
+
                 // console.log(disasterdata)
                 // SetDData(disasterdata);
 
@@ -637,55 +637,14 @@ export default function ImpactSpider(props) {
                 .attr('height', height + margin.top + margin.bottom)
 
             const angleSlice = Math.PI * 2 / 7;
-            if (type == 0) {
-                svg.style('position', 'absolute')
-                    .style('top', 305 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
-                    .style('left', 765 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
-                    .append('g')
-                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-            }
-            else if (type == 1) {
-                svg.style('position', 'absolute')
-                    .style('top', 365 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
-                    .style('left', 895 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
-                    .append('g')
-                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-            }
-            else if (type == 2) {
-                svg.style('position', 'absolute')
-                    .style('top', 515 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
-                    .style('left', 925 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
-                    .append('g')
-                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-            }
-            else if (type == 3) {
-                svg.style('position', 'absolute')
-                    .style('top', 605 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
-                    .style('left', 895 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
-                    .append('g')
-                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-            }
-            else if (type == 4) {
-                svg.style('position', 'absolute')
-                    .style('top', 605 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
-                    .style('left', 745 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
-                    .append('g')
-                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-            }
-            else if (type == 5) {
-                svg.style('position', 'absolute')
-                    .style('top', 545 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
-                    .style('left', 605 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
-                    .append('g')
-                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-            }
-            else if (type == 6) {
-                svg.style('position', 'absolute')
-                    .style('top', 285 + rScale(maxValue * 1.1) * Math.sin(angleSlice * type - Math.PI / 2))
-                    .style('left', 625 + rScale(maxValue * 1.1) * Math.cos(angleSlice * type - Math.PI / 2))
-                    .append('g')
-                    .attr('transform', `translate(${margin.left}, ${margin.top})`);
-            }
+
+
+            svg.style('position', 'absolute')
+                .style('top', Math.min(470, window.innerWidth - 10) + rScale(maxValue * 2.2) * Math.sin(angleSlice * type - Math.PI / 2 + Math.PI / 45))
+                .style('left', Math.min(820, window.innerWidth - 10) + rScale(maxValue * 2.2) * Math.cos(angleSlice * type - Math.PI / 2 + Math.PI / 45))
+                .append('g')
+                .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
 
             var tooltip = d3
                 .select(".example-container")
@@ -761,11 +720,9 @@ export default function ImpactSpider(props) {
                 })
                 .on("click", function () {
                     d3.select('.barChart1').selectAll("svg").remove();
-                    if (clicked != type) {
-                        Chart1(dataKey, color, type);
-                    }
-                    SetClick(type)
-                    console.log(clicked)
+
+                    Chart1(dataKey, color, type);
+
 
                 })
                 .attr('width', x.bandwidth())
