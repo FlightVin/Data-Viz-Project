@@ -45,7 +45,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/landing-page" />} />
         <Route path="/landing-page" element={<Home />} />
-        <Route path="/aid-politics-yes/:start/:end" element={<AidPoliticsYes />} />
+        <Route path="/aid-politics-yes" element={<AidPoliticsYes />} />
         <Route path="/geo-distro" element={<GeoDistro />} />
         <Route path="/impact-spider" element={<ImpactSpider />} />
         <Route path="/aid-politics" element={<AidPolitics />} />

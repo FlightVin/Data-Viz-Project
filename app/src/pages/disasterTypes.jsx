@@ -2,54 +2,49 @@ import * as d3 from "d3";
 import * as React from 'react';
 import * as d3Sankey from "d3-sankey"
 import Loading from './loading';
-import Header from "../partials/Header";
 
-// Copyright 2021 Observable, Inc.
-    // Released under the ISC license.
-    // https://observablehq.com/@d3/sankey-diagram
+// Inspiration from Observable, Inc.
     function SankeyChart({
-        nodes, // an iterable of node objects (typically [{id}, …]); implied by links if missing
-        links // an iterable of link objects (typically [{source, target}, …])
+        nodes,
+        links 
     }, {
-        format = ",", // a function or format specifier for values in titles
-        align = "justify", // convenience shorthand for nodeAlign
-        nodeId = d => d.id, // given d in nodes, returns a unique identifier (string)
-        nodeGroup, // given d in nodes, returns an (ordinal) value for color
-        nodeGroups, // an array of ordinal values representing the node groups
-        nodeLabel, // given d in (computed) nodes, text to label the associated rect
-        nodeTitle = d => `${d.id}\n${format(d.value)}`, // given d in (computed) nodes, hover text
-        nodeAlign = align, // Sankey node alignment strategy: left, right, justify, center
-        nodeWidth = 15, // width of node rects
-        nodePadding = 10, // vertical separation between adjacent nodes
-        nodeLabelPadding = 6, // horizontal separation between node and label
-        nodeStroke = "currentColor", // stroke around node rects
-        nodeStrokeWidth, // width of stroke around node rects, in pixels
-        nodeStrokeOpacity, // opacity of stroke around node rects
-        nodeStrokeLinejoin, // line join for stroke around node rects
-        linkSource = ({source}) => source, // given d in links, returns a node identifier string
-        linkTarget = ({target}) => target, // given d in links, returns a node identifier string
-        linkValue = ({value}) => value, // given d in links, returns the quantitative value
-        linkPath = d3Sankey.sankeyLinkHorizontal(), // given d in (computed) links, returns the SVG path
-        linkTitle = d => `${d.source.id} → ${d.target.id}\n${format(d.value)}`, // given d in (computed) links
-        linkColor = "source-target", // source, target, source-target, or static color
-        linkStrokeOpacity = 0.5, // link stroke opacity
-        linkMixBlendMode = "multiply", // link blending mode
-        colors = d3.schemeTableau10, // array of colors
-        width = 640, // outer width, in pixels
-        height = 400, // outer height, in pixels
-        marginTop = 5, // top margin, in pixels
-        marginRight = 1, // right margin, in pixels
-        marginBottom = 5, // bottom margin, in pixels
-        marginLeft = 1, // left margin, in pixels
+        format = ",", 
+        align = "justify", 
+        nodeId = d => d.id, 
+        nodeGroup, 
+        nodeGroups, 
+        nodeLabel, 
+        nodeTitle = d => `${d.id}\n${format(d.value)}`,
+        nodeAlign = align, 
+        nodeWidth = 15, 
+        nodePadding = 10,
+        nodeLabelPadding = 6,
+        nodeStroke = "currentColor",
+        nodeStrokeWidth,
+        nodeStrokeOpacity, 
+        nodeStrokeLinejoin, 
+        linkSource = ({source}) => source, 
+        linkTarget = ({target}) => target, 
+        linkValue = ({value}) => value,
+        linkPath = d3Sankey.sankeyLinkHorizontal(), 
+        linkTitle = d => `${d.source.id} → ${d.target.id}\n${format(d.value)}`,
+        linkColor = "source-target",
+        linkStrokeOpacity = 0.5,
+        linkMixBlendMode = "multiply", 
+        colors = d3.schemeTableau10,
+        width = 640, 
+        height = 400, 
+        marginTop = 5, 
+        marginRight = 1, 
+        marginBottom = 5, 
+        marginLeft = 1,
     } = {}) {
-        // Convert nodeAlign from a name to a function (since d3-sankey is not part of core d3).
         if (typeof nodeAlign !== "function") nodeAlign = {
         left: d3Sankey.sankeyLeft,
         right: d3Sankey.sankeyRight,
         center: d3Sankey.sankeyCenter
         }[nodeAlign] ?? d3Sankey.sankeyJustify;
     
-        // Compute values.
         const LS = d3.map(links, linkSource).map(intern);
         const LT = d3.map(links, linkTarget).map(intern);
         const LV = d3.map(links, linkValue);
@@ -57,17 +52,13 @@ import Header from "../partials/Header";
         const N = d3.map(nodes, nodeId).map(intern);
         const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
     
-        // Replace the input nodes and links with mutable objects for the simulation.
         nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
         links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i], value: LV[i]}));
     
-        // Ignore a group-based linkColor option if no groups are specified.
         if (!G && ["source", "target", "source-target"].includes(linkColor)) linkColor = "currentColor";
     
-        // Compute default domains.
         if (G && nodeGroups === undefined) nodeGroups = G;
     
-        // Construct the scales.
         console.log(nodeGroups)
         const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
     
@@ -89,6 +80,7 @@ import Header from "../partials/Header";
         const svg = d3.create("svg")
             .attr("width", width)
             .attr("height", height)
+            .attr('id', 'disaster-types-svg')
             .attr("viewBox", [0, 0, width, height])
             .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
     
@@ -167,7 +159,7 @@ export default function DisasterTypes(props) {
 
         // removing older svgs
         try {   
-            d3.selectAll('svg').remove();
+            d3.selectAll('#disaster-types-svg').remove();
         } catch {
             // nothing
         }
@@ -257,7 +249,7 @@ export default function DisasterTypes(props) {
             });
 
 
-        const parent = document.getElementById('viz-div');
+        const parent = document.getElementById('viz-div-sankey');
         parent.appendChild(ele);
     }
 
@@ -283,7 +275,6 @@ export default function DisasterTypes(props) {
 
     return (
         <>
-            <Header/>
             <main
                 style={{
                 height: "100vh",
@@ -295,16 +286,14 @@ export default function DisasterTypes(props) {
                 }}
             >
                 <p
-                    style={{
-                        marginTop: '100px'
-                    }}
-                    id="vineeth_heading"
+                    id="vineeth_heading_sankey"
                     data-aos="zoom-in" data-aos-delay="100"
+                    className="mt-5 text-2xl"
                 >
                     Disaster Types
                 </p>
 
-            <div id='viz-div'
+            <div id='viz-div-sankey'
                 data-aos="zoom-in" data-aos-delay="400"
             >
             </div>
