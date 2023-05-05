@@ -1,9 +1,6 @@
 import * as d3 from "d3";
 import * as React from 'react';
 import './aidPolitics.css'
-import Loading from './loading';
-import {  useParams} from "react-router-dom";
-import Header from "../partials/Header";
 import worldImage from '../images/squares-world-new.jpg';
 
 // for the image
@@ -15,34 +12,19 @@ const viewWidth = imgWidth*scaleFactor;
 
 const boxSize = 400;
 
-const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
 
-export default function AidPoliticsYes(props) {
-    const {start, end} = useParams();
+export default function AidPoliticsYes({start, end, data}) {
     console.log('Aid analytics for year', start, end);
-
-    const [data, setData] = React.useState(null);
-    const [isLoading, setLoading] = React.useState(true);
 
     var margin = {top: 10, right: 10, bottom: 10, left: 10},
     width = 600 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
     React.useEffect(() => {
-        setTimeout(() => {
-            d3.csv(datasetLink)
-                .then(res => {
-                    setData(res);
-                    setLoading(false);
-                })
-        }, 1000);
-    }, []);
-
-    React.useEffect(() => {
         const drawAidPolitics = () => {
 
             var tooltip = d3
-                .select(".viz-div")
+                .select(".viz-div-map")
                 .append("div")
                 .style("opacity", 0)
                 .style("position", "absolute")
@@ -215,18 +197,11 @@ export default function AidPoliticsYes(props) {
                 .style("alignment-baseline", "middle")
         }
 
-        if (!isLoading) drawAidPolitics();
-    }, [isLoading]);
-
-    if (isLoading) {
-        return (
-            <Loading />
-        );
-    }
+        drawAidPolitics();
+    }, []);
 
     return (
         <>
-            <Header />
             <main
                 style={{
                 display: "flex",
@@ -234,21 +209,14 @@ export default function AidPoliticsYes(props) {
                 alignItems: "center",
                 flexDirection: "column",
                 }}
+                className="mr-4"
             >
-                <p
-                id="vineeth_heading"
-                style={{
-                    marginTop:'100px'
-                }}
-                >
-                    International Aid Visualization: Countries which appealed for international aid
-                </p>
 
-                <div className="viz-div"
+                <div className="viz-div-map"
                     style={{
                         marginTop:'30px',
-                        width:`${viewWidth}px`,
-                        height:`${viewHeight}px`,
+                        width:`${viewWidth*4/5}px`,
+                        height:`${viewHeight*4/5}px`,
                     }}
                 >
 
@@ -261,7 +229,6 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
-                        data-aos="zoom-in" data-aos-delay="450"
                     >
                     </div>
 
@@ -274,7 +241,6 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
-                        data-aos="zoom-in" data-aos-delay="450"
                     >
                     </div>
 
@@ -287,7 +253,6 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
-                        data-aos="zoom-in" data-aos-delay="450"
                     >
                         
                     </div>
@@ -301,7 +266,6 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
-                        data-aos="zoom-in" data-aos-delay="450"
                     >
                         
                     </div>
@@ -315,7 +279,6 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
-                        data-aos="zoom-in" data-aos-delay="450"
                     >
                         
                     </div>
@@ -329,16 +292,12 @@ export default function AidPoliticsYes(props) {
                             width:1,
                             height:1,
                         }}
-                        data-aos="zoom-in" data-aos-delay="400"
                     >
                         
                     </div>
-                    
-
 
                     <img className="h-full w-full opacity-50" 
                     src={worldImage} alt="Hero" 
-                    data-aos="zoom-in" data-aos-delay="300"
                     />
 
                 </div>

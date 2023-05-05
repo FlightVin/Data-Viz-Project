@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Tree from 'react-d3-tree';
 import CircularProgress from '@mui/material/CircularProgress';
 import Header from "../partials/Header";
+import AidPoliticsYes from "./aidPoliticsYes";
 
 const datasetLink = "https://raw.githubusercontent.com/FlightVin/Data-Viz-Labs/main/calamity-dataset.csv";
 export default function AidPolitics(props) {
@@ -22,7 +23,7 @@ export default function AidPolitics(props) {
 
     const navigateTo = (route) => {
         return function() {
-            navigate(route+"/"+yearRange[0]+"/"+yearRange[1]);
+            navigate(route);
         }
     }
 
@@ -228,69 +229,72 @@ export default function AidPolitics(props) {
 
     return (
         <>
-            <Header/>
             <main
                 style={{
-                height: "100vh",
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center",
                 flexDirection: "column",
                 padding: '20px',
                 }}
             >
-                <p
-                    style={{
-                        marginTop:'100px'
-                    }}
-                id="vineeth_heading"
-                >
-                    International Aid Visualization: Select Range of Years
-                </p>
-                <p>
-                    <Box sx={{ width: 500 }}
-                    data-aos="zoom-in" data-aos-delay="300"
+                <div className="w-full flex items-center justify-center flex-col">
+                    <p
+                        id="mitansh_heading_geo-dustro"
+                        data-aos="zoom-in" data-aos-delay="100"
+                        className="mt-24 mb-10 text-2xl"
                     >
-                        <Slider
-                            getAriaLabel={() => 'Year range'}
-                            value={yearRange}
-                            onChange={handleYearChange}
-                            valueLabelDisplay="auto"
-                            getAriaValueText={yearRangeText}
-                            disableSwap
-                            step={1}
-                            min={1900}
-                            max={2023}
-                        /> 
-                    </Box>
-                </p>
+                        Aid requests
+                    </p>
+                    <p>
+                        <Box sx={{ width: 500 }}
+                        >
+                            <Slider
+                                getAriaLabel={() => 'Year range'}
+                                value={yearRange}
+                                onChange={handleYearChange}
+                                valueLabelDisplay="auto"
+                                getAriaValueText={yearRangeText}
+                                disableSwap
+                                step={1}
+                                min={1900}
+                                max={2023}
+                            /> 
+                        </Box>
+                    </p>
+                
 
-                <div style={{display: 'flex', justifyContent: 'space-between'}}
-                    data-aos="zoom-in" data-aos-delay="400"
-                >
-                    <Button variant="outlined" onClick={handleViz}>Visualize</Button> 
-                    <Button variant="contained" onClick={navigateTo('/aid-politics-yes')
-                    }
-                    style={{
-                        marginLeft:'30px'
-                    }}
-
-                    >Map View for only appeals</Button>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}
+                    >
+                        <Button variant="outlined" onClick={handleViz}>Visualize</Button> 
+                    </div>
                 </div>
 
 
-                <div className="visual-div" style={{ width: '1400px', height: '900px' }}>
+                <div className="visual-div flex items-center justify-center ml-32" style={{ width: '800px', height: '500px' }}>
                     {
                         !vizLoading ? 
                             <Tree 
                                 data={treeData} 
                                 separation= {{ nonSiblings: 0.5, siblings: 0.3 }}    
-                                translate={{x:500, y:300}}
+                                translate={{x:180, y:150}}
                                 depthFactor={200}
                                 rootNodeClassName="node__root"
                                 branchNodeClassName="node__branch"
                                 leafNodeClassName="node__leaf"
                             />
+
+
+                        :
+                            <CircularProgress />
+                    }
+                </div>
+
+
+                <div className="map-div flex items-center justify-center mt-12 mr-4 mb-20">
+                    {
+                        !vizLoading ? 
+                            <AidPoliticsYes start={yearRange[0]} end={yearRange[1]} data={data}/>
+
                         :
                             <CircularProgress />
                     }

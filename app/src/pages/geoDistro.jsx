@@ -312,6 +312,7 @@ export default function GeoDistro(props) {
           flexDirection: "column",
         }}
       >
+
         <div className="custom-select">
           {typearray && (
             <div>
@@ -330,9 +331,6 @@ export default function GeoDistro(props) {
             </div>
           )}
         </div>
-        <p id="mitansh_heading">
-          Geographical Distribution of Natural Disasters:
-        </p>
 
         <p>
           <Box sx={{ width: 300 }}>

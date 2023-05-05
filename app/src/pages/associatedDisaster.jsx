@@ -116,7 +116,7 @@ export default function AssociatedDisaster(props) {
         const drawAssociations = () => {
             // removing older svgs
             try {   
-                d3.selectAll('svg').remove();
+                d3.selectAll('#associated-svg').remove();
             } catch {
                 // nothing
             }
@@ -148,8 +148,9 @@ export default function AssociatedDisaster(props) {
                     root.each(d => d.current = d);
                   
                     const svg = d3.create("svg")
+                        .attr('id', 'associated-svg')
                         .attr("viewBox", [0, 0, width, width])
-                        .style("font", "10px sans-serif");
+                        .style("font", "13px sans-serif");
                   
                     const g = svg.append("g")
                         .attr("transform", `translate(${width / 2},${width / 2})`);
@@ -240,7 +241,7 @@ export default function AssociatedDisaster(props) {
             }
 
             const ele = chart();
-            const parent = document.getElementById('viz-div');
+            const parent = document.getElementById('viz-div-associated');
             parent.appendChild(ele);
         }
 
@@ -267,15 +268,14 @@ export default function AssociatedDisaster(props) {
             >
 
                 <p
-                    style={{
-                        marginTop:'100px'
-                    }}
-                id="vineeth_heading"
+                    id="vineeth_heading_sankey"
+                    data-aos="zoom-in" data-aos-delay="100"
+                    className="mt-5 text-2xl"
                 >
                     Associated Disasters: Disasters that lead to other disasters
                 </p>
 
-                <div id='viz-div'
+                <div id='viz-div-associated'
                     style={{
                         width: '900px',
                         marginTop:'30px'
