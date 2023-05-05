@@ -241,7 +241,7 @@ export default function AidPolitics(props) {
                     <p
                         id="mitansh_heading_geo-dustro"
                         data-aos="zoom-in" data-aos-delay="100"
-                        className="mt-24 mb-10 text-2xl"
+                        className="mt-24 text-2xl"
                     >
                         Aid requests
                     </p>
@@ -270,27 +270,40 @@ export default function AidPolitics(props) {
                 </div>
 
 
-                <div className="visual-div flex items-center justify-center ml-32" style={{ width: '800px', height: '500px' }}>
-                    {
-                        !vizLoading ? 
-                            <Tree 
-                                data={treeData} 
-                                separation= {{ nonSiblings: 0.5, siblings: 0.3 }}    
-                                translate={{x:180, y:150}}
-                                depthFactor={200}
-                                rootNodeClassName="node__root"
-                                branchNodeClassName="node__branch"
-                                leafNodeClassName="node__leaf"
-                            />
+                <div className="w-full flex flex-row items-center">
+                    <div className="visual-div flex items-center justify-center ml-32" style={{ width: '800px', height: '500px' }}>
+                        {
+                            !vizLoading ? 
+                                <Tree 
+                                    data={treeData} 
+                                    separation= {{ nonSiblings: 0.5, siblings: 0.3 }}    
+                                    translate={{x:180, y:150}}
+                                    depthFactor={200}
+                                    rootNodeClassName="node__root"
+                                    branchNodeClassName="node__branch"
+                                    leafNodeClassName="node__leaf"
+                                />
 
 
-                        :
-                            <CircularProgress />
-                    }
+                            :
+                                <CircularProgress />
+                        }
+                    </div>
+
+                    <div className="ml-48 w-96">
+                    <p className="text-xl text-slate-700 hover:text-gray-500 mb-10 text-justify"
+                    data-aos="zoom-out" data-aos-delay="350">
+The collapsible chart categorises countries into those that have requested international aid and those that have not. The chart can be expanded to reveal additional information such as the years.
+                    </p>
+                    <p className="text-xl text-slate-700 hover:text-gray-500 text-justify"
+                    data-aos="zoom-out" data-aos-delay="350">
+In the map, circles are positioned as close together as possible without overlapping and are colour-coded to represent different continents. Hovering over a circle displays information about the country, the type of disaster, and the amount of aid received. 
+                    </p>
+                    </div>
                 </div>
 
 
-                <div className="map-div flex items-center justify-center mt-12 mr-4 mb-20">
+                <div className="map-div">
                     {
                         !vizLoading ? 
                             <AidPoliticsYes start={yearRange[0]} end={yearRange[1]} data={data}/>

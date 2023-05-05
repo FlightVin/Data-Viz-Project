@@ -312,7 +312,6 @@ export default function GeoDistro(props) {
           flexDirection: "column",
         }}
       >
-
         <div className="custom-select">
           {typearray && (
             <div>

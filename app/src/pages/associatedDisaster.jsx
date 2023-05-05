@@ -256,7 +256,6 @@ export default function AssociatedDisaster(props) {
 
     return (
         <>
-            <Header/>
 
             <main
                 style={{
@@ -270,18 +269,34 @@ export default function AssociatedDisaster(props) {
                 <p
                     id="vineeth_heading_sankey"
                     data-aos="zoom-in" data-aos-delay="100"
-                    className="mt-5 text-2xl"
+                    className="h3 mb-4"
                 >
                     Associated Disasters: Disasters that lead to other disasters
                 </p>
 
-                <div id='viz-div-associated'
-                    style={{
-                        width: '900px',
-                        marginTop:'30px'
-                    }}
-                    data-aos="zoom-in" data-aos-delay="400"
-                    >
+                <div
+                    data-aos="zoom-in" data-aos-delay="200"
+                    className="flex flex-row items-center"                
+                >
+
+                    <div id='viz-div-associated'
+                        style={{
+                            width: '950px',
+                        }}
+                        className="flex flex-row items-center mt-10"
+                        >
+                    </div>
+
+                    <div className="ml-48 w-96">
+                    <p className="text-xl text-slate-700 hover:text-gray-500 mb-24 text-justify"
+                    data-aos="zoom-out" data-aos-delay="350">
+The sunburst chart is an innovative visualisation that provides a comprehensive overview of the disasters and their associated disasters that have occurred over the years. This interactive chart is effective in understanding the hierarchy of disasters and their relationship with each other. The chart allows for zooming in and out, which makes it easy to explore hierarchical data and provides finer visualisation to ensure that subsequent disasters are not dwarfed out by others.                    </p>
+
+                    <p className="text-xl text-slate-700 hover:text-gray-500 text-justify"
+                    data-aos="zoom-out" data-aos-delay="350">
+To interact with the chart, simply hover over a sector to see all the disasters that led to the occurrence of the disaster in question, along with the number of times such a phenomenon has been seen from 1900 onwards. Clicking on a sector causes an enlargement, allowing for a deeper dive into the hierarchy of disasters. To reset the chart, click on the empty area inside the sunburst chart.
+                    </p>
+                    </div> 
 
                 </div>
 

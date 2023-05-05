@@ -6,7 +6,7 @@ import worldImage from '../images/squares-world-new.jpg';
 // for the image
 const imgHeight = 736;
 const imgWidth = 1600;
-const scaleFactor = 1;
+const scaleFactor = 0.8;
 const viewHeight = imgHeight*scaleFactor;
 const viewWidth = imgWidth*scaleFactor;
 

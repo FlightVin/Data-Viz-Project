@@ -104,6 +104,7 @@ import Loading from './loading';
         const link = svg.append("g")
             .attr("fill", "none")
             .attr("stroke-opacity", linkStrokeOpacity)
+            .attr("class", "disaster-path")
         .selectAll("g")
         .data(links)
         .join("g")
@@ -132,7 +133,7 @@ import Loading from './loading';
     
         if (Tl) svg.append("g")
             .attr("font-family", "sans-serif")
-            .attr("font-size", 14)
+            .attr("font-size", 15)
         .selectAll("text")
         .data(nodes)
         .join("text")
@@ -288,14 +289,26 @@ export default function DisasterTypes(props) {
                 <p
                     id="vineeth_heading_sankey"
                     data-aos="zoom-in" data-aos-delay="100"
-                    className="mt-5 text-2xl"
+                    className="h3 mb-4"
                 >
-                    Disaster Types
+                    Disaster Types: Grouping disasters into their types
                 </p>
 
             <div id='viz-div-sankey'
-                data-aos="zoom-in" data-aos-delay="400"
+                data-aos="zoom-in" data-aos-delay="200"
+                className="flex flex-row items-center"
             >
+                <div className="mr-24 w-96">
+                    <p className="text-xl text-slate-700 hover:text-gray-500 mb-24 text-justify"
+                    data-aos="zoom-out" data-aos-delay="350">
+                    The Sankey chart groups disasters into different hierarchies such as natural, climatological, hydrological, and so on. The chart depicts the flow of disasters through these hierarchies and helps to understand the frequency of disasters in each category. It can help emergency managers and other stakeholders to better understand the risks and vulnerabilities associated with different types of disasters, and to develop more effective strategies for preparedness, response, and recovery.
+                    </p>
+
+                    <p className="text-xl text-slate-700 hover:text-gray-500 text-justify"
+                    data-aos="zoom-out" data-aos-delay="350">
+                    The width of the links is proportional to the magnitude of the flow being represented. This allows viewers to quickly identify which elements are most significant in the system and which are less important. Also hovering over a link displays information about the number of disasters that flow through that link. Clicking on a node provides more detailed information about the disasters within that category.
+                    </p>
+                </div>
             </div>
                 
             </main>

@@ -605,7 +605,7 @@ export default function DecadalDeaths(props) {
         }}
       >
         <p>
-          <Box sx={{ width: 500 }}>
+          <Box sx={{ width: 500 }} className='mt-10'>
             <Slider
               getAriaLabel={() => "Year Range"}
               value={valueYear}

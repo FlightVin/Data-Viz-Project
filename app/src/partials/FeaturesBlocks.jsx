@@ -35,7 +35,7 @@ function FeaturesBlocks() {
           <div className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
 
           <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
-            data-aos="fade-up" data-aos-delay="450">
+            data-aos="fade-up" data-aos-delay="300">
               <a href='#viz-disaster-types'>
               <img className="mx-auto h-52" src={SankeyImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Disaster Types Distribution</h4>
@@ -48,7 +48,7 @@ function FeaturesBlocks() {
             </div>
 
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
-            data-aos="fade-up" data-aos-delay="450">
+            data-aos="fade-up" data-aos-delay="300">
               <a href='#viz-associated-disasters'>
               <img className="mx-auto h-52" src={SunburstImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Associated disasters</h4>
@@ -60,7 +60,7 @@ function FeaturesBlocks() {
             </div>
 
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
-            data-aos="fade-up" data-aos-delay="450">
+            data-aos="fade-up" data-aos-delay="300">
               <a href='#viz-geo-distro'>
               <img className="mx-auto h-52" src={worldImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Geographical Distribution</h4>
@@ -72,7 +72,8 @@ function FeaturesBlocks() {
               vice-versa.</p>
             </div>
 
-            <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl">
+            <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
+            data-aos="fade-up" data-aos-delay="300">
             <a href='#viz-decadal'>
                 <img className="mx-auto h-52" src={barImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Decadal Fatalities</h4>
@@ -83,7 +84,7 @@ function FeaturesBlocks() {
             </div>
 
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
-            data-aos="fade-up" data-aos-delay="450">
+            data-aos="fade-up" data-aos-delay="300">
               <a href='#viz-international-aid'>
                 <img className="mx-auto h-52" src={TreeImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">International Aid</h4>
@@ -94,7 +95,7 @@ function FeaturesBlocks() {
             </div>
 
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
-            data-aos="fade-up" data-aos-delay="450">
+            data-aos="fade-up" data-aos-delay="300">
               <a href='#viz-econ-human-distro'>
               <img className="mx-auto h-52" src={RadarImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Human and Economic factors</h4>
@@ -106,7 +107,7 @@ function FeaturesBlocks() {
             </div>
 
             <div className="relative flex flex-col items-center p-6 bg-slate-100 rounded shadow-xl"
-            data-aos="fade-up" data-aos-delay="450">
+            data-aos="fade-up" data-aos-delay="300">
               <a href='#viz-emergency'>
               <img className="mx-auto h-52" src={impactImage} alt="Hero" />
                 <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">Emergency Declaration</h4>
