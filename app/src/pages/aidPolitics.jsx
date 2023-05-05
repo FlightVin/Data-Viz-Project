@@ -239,11 +239,11 @@ export default function AidPolitics(props) {
             >
                 <div className="w-full flex items-center justify-center flex-col">
                     <p
-                        style={{
-                        }}
-                    id="vineeth_heading"
+                        id="mitansh_heading_geo-dustro"
+                        data-aos="zoom-in" data-aos-delay="100"
+                        className="mt-24 mb-10 text-2xl"
                     >
-                        International Aid Visualization: Select Range of Years
+                        Aid requests
                     </p>
                     <p>
                         <Box sx={{ width: 500 }}
@@ -290,7 +290,7 @@ export default function AidPolitics(props) {
                 </div>
 
 
-                <div className="map-div flex items-center justify-center mt-12 mr-4">
+                <div className="map-div flex items-center justify-center mt-12 mr-4 mb-20">
                     {
                         !vizLoading ? 
                             <AidPoliticsYes start={yearRange[0]} end={yearRange[1]} data={data}/>

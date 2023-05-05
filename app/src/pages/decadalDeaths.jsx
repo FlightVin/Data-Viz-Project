@@ -604,7 +604,6 @@ export default function DecadalDeaths(props) {
           flexDirection: "column",
         }}
       >
-        <p id="mitansh_heading">Decadal Deaths due to Natural Disasters:</p>
         <p>
           <Box sx={{ width: 500 }}>
             <Slider
