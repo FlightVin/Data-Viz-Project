@@ -12,7 +12,6 @@ export default function ImpactSpider(props) {
   const [typearray, SetTypeArray] = useState([
     "Earthquake",
     "Wildfire",
-    "Storm",
     "Extreme temperature ",
     "Drought",
     "Landslide",
@@ -20,6 +19,9 @@ export default function ImpactSpider(props) {
     "Epidemic",
     "Insect infestation",
   ]);
+  const [UnitArray, SetUnitArray] = useState({
+    'Earthquake': "Richter", 'Wildfire': "Km2", 'Flood': "Km2", 'Storm': "Kph", 'Extreme temperature ': "°C", 'Drought': "Km2", 'Landslide': "Kph", 'Volcanic activity': "Kph", 'Epidemic': "Vaccinated", 'Insect infestation': "km2"
+  });
 
   useEffect(() => {
     const getdisasterdata = async () => {
@@ -61,7 +63,7 @@ export default function ImpactSpider(props) {
             const noCount = countNo.get(magnitude) || 0;
             return {
               magnitude:
-                type === "Earthquake" && magnitude === 0 ? 2 : magnitude,
+                (type === "Earthquake" && magnitude === 0 ? 2 : magnitude) || (type === "Drought" && magnitude === 0 ? 521800 : magnitude) || (type === "Landslide" && magnitude === 0 ? 30000 : magnitude) || (type === "Volcanic activity" && magnitude === 0 ? 100 : magnitude),
               yesCount,
               noCount,
               totalCount,
@@ -191,12 +193,12 @@ export default function ImpactSpider(props) {
                 .style("top", event.pageY + "px")
                 .html(
                   `Magnitude: ${x}` +
-                    "</br>" +
-                    `Emergency declared:${yescount}` +
-                    "</br>" +
-                    `Not Declared: ${nocount}` +
-                    "</br>" +
-                    `Total Occurrences: ${yescount + nocount}`
+                  "</br>" +
+                  `Emergency declared:${yescount}` +
+                  "</br>" +
+                  `Not Declared: ${nocount}` +
+                  "</br>" +
+                  `Total Occurrences: ${yescount + nocount}`
                 )
                 .attr("font-size", "10px");
             })
@@ -223,12 +225,12 @@ export default function ImpactSpider(props) {
                 .style("top", event.pageY + "px")
                 .html(
                   `Magnitude: ${x}` +
-                    "</br>" +
-                    `Emergency declared: ${yescount}` +
-                    "</br>" +
-                    `Not Declared: ${nocount}` +
-                    "</br>" +
-                    `Total Occurrences: ${yescount + nocount}`
+                  "</br>" +
+                  `Emergency declared: ${yescount}` +
+                  "</br>" +
+                  `Not Declared: ${nocount}` +
+                  "</br>" +
+                  `Total Occurrences: ${yescount + nocount}`
                 )
                 .attr("font-size", "10px");
             })
@@ -239,19 +241,13 @@ export default function ImpactSpider(props) {
         }
       }
 
-      svg
-        .append("text")
-        .attr("x", cfg.w / 2)
-        .attr("y", cfg.margin.top / 2 + 10)
-        .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .text("Impact of Disasters by Magnitude");
+
 
       const legend = svg
         .append("g")
         .attr(
           "transform",
-          "translate(" + cfg.w / 1.2 + "," + (cfg.margin.top + 10) + ")"
+          "translate(" + cfg.w / 1.5 + "," + (cfg.margin.top + 10) + ")"
         )
         .selectAll("g")
         .data(["Emergency was declared", "Emergency was not declared"])
@@ -334,6 +330,15 @@ export default function ImpactSpider(props) {
             </div>
           )}
         </div>
+
+
+      </div>
+      <div>
+        Units of Magnitude is : <strong>{UnitArray[type]}</strong>
+        <br />
+        <strong>
+          Impact of Disasters by Magnitude
+        </strong>
       </div>
 
       <div id="my_dataviz"></div>
