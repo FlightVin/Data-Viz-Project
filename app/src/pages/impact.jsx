@@ -92,9 +92,9 @@ export default function ImpactSpider(props) {
       console.log(magnitudes.length);
 
       var cfg = {
-        w: 1500, //Width of the graph
-        h: 1000, // height of graph
-        margin: { top: 20, right: 700, bottom: 100, left: 100 }, //The margins of the SVG
+        w: 1200, //Width of the graph
+        h: 800, // height of graph
+        margin: { top: 0, right: 700, bottom: 100, left: 100 }, //The margins of the SVG
       };
       // if (cfg.w < 1200) {
       //   cfg.w = 1200;
@@ -164,7 +164,7 @@ export default function ImpactSpider(props) {
         .style("opacity", 0)
         .style("position", "absolute")
         .style("z-index", "10")
-        .style("font-size", "25px")
+        .style("font-size", "18px")
         .style("background-color", "white")
         .style("border", "solid")
         .style("border-width", "2px")
@@ -342,15 +342,15 @@ export default function ImpactSpider(props) {
 
 
       </div>
-      <div className="units">
-        Units of Magnitude is : <strong>{UnitArray[type]}</strong>
-        <br />
-        <strong>
-          Impact of Disasters by Magnitude
-        </strong>
+      <div className='units'>
+            <p className="text-2xl text-slate-700 hover:text-gray-500 mb-10 text-justify">
+                Units of Magnitude is : {UnitArray[type]}
+            </p>
       </div>
 
-      <div id="my_dataviz"></div>
+      <div id="my_dataviz"
+        className="flex align-center justify-center"
+      ></div>
     </div>
   );
 }
