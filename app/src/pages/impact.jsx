@@ -11,11 +11,11 @@ export default function ImpactSpider(props) {
   const [type, SetType] = useState("Earthquake");
   const [typearray, SetTypeArray] = useState([
     "Earthquake",
-    "Wildfire",
     "Extreme temperature ",
     "Drought",
     "Landslide",
     "Volcanic activity",
+    "Wildfire",
     "Epidemic",
   ]);
   const [UnitArray, SetUnitArray] = useState({
@@ -58,12 +58,13 @@ export default function ImpactSpider(props) {
         // combine the above counts for each magnitude
         const magCounts = Array.from(countTotal.entries()).map(
           ([magnitude, totalCount]) => {
-            const yesCount = countYes.get(magnitude) || 22;
+            const yesCount = countYes.get(magnitude) || 1;
             const noCount = countNo.get(magnitude) || 0;
             return {
               magnitude:
-                (type === "Earthquake" && magnitude === 0 ? 2 : magnitude) || (type === "Drought" && magnitude === 0 ? 521800 : magnitude) || (type === "Landslide" && magnitude === 0 ? 30000 : magnitude) || (type === "Volcanic activity" && magnitude === 0 ? 100 : magnitude),
-              yesCount,
+                (type === "Earthquake" && magnitude === 0 ? 2 : magnitude) || (type === "Drought" && magnitude === 0 ? 521800 : magnitude) || (type === "Landslide" && magnitude === 0 ? 30000 : magnitude) || (type === "Volcanic activity" && magnitude === 0 ? 100 : magnitude) || (type === "Epidemic" && magnitude === 0 ? 8000000 : magnitude) || (type === "Wildfire" && magnitude === 0 ? 4000000 : magnitude),
+              yesCount:
+                (type === "Earthquake" && magnitude === 9 ? 54 : yesCount) || (type === "Earthquake" && magnitude === 3 ? 0 : yesCount),
               noCount,
               totalCount,
             };
@@ -93,7 +94,7 @@ export default function ImpactSpider(props) {
       var cfg = {
         w: 1500, //Width of the graph
         h: 1000, // height of graph
-        margin: { top: 20, right: 50, bottom: 100, left: 100 }, //The margins of the SVG
+        margin: { top: 20, right: 700, bottom: 100, left: 100 }, //The margins of the SVG
       };
       // if (cfg.w < 1200) {
       //   cfg.w = 1200;
@@ -122,7 +123,7 @@ export default function ImpactSpider(props) {
       var svg = d3
         .select("#my_dataviz")
         .append("svg")
-        .attr("width", cfg.w + cfg.margin.left)
+        .attr("width", cfg.w + cfg.margin.left + cfg.margin.right)
         .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
         .append("g")
         .attr(
@@ -142,12 +143,9 @@ export default function ImpactSpider(props) {
         )
         .call(xAxis);
 
-      // svg.selectAll("text").attr("transform", "translate(20,0)");
-
       const yAxis = d3.axisLeft(yScale)
         .tickSize(4)
         .ticks(10)
-      // .tickFormat(d3.max(disasterdata, (d) => d.totalCount)); // Set the tick label format to an empty string
 
       svg
         .append("g")
@@ -166,25 +164,13 @@ export default function ImpactSpider(props) {
         .style("opacity", 0)
         .style("position", "absolute")
         .style("z-index", "10")
+        .style("font-size", "25px")
         .style("background-color", "white")
         .style("border", "solid")
         .style("border-width", "2px")
         .style("border-radius", "5px")
         .style("padding", "5px");
 
-      // var stackGen = d3.stack().keys();
-
-      console.log(disasterdata);
-
-      // var magnitudes = [];
-
-      // for (var i = 0; i < disasterdata.length; i++) {
-      //   magnitudes.push(disasterdata[i].magnitude + 1);
-      // }
-
-      // console.log("disasterdata",disasterdata)
-
-      console.log(magnitudes)
 
       var stackGen = d3.stack().keys(["yesCount", "noCount"]);
 
@@ -202,15 +188,12 @@ export default function ImpactSpider(props) {
         data_viz.push(data_mag);
       }
 
-      console.log(data_viz)
       const final_data = stackGen(data_viz)
 
       var colorScale = d3
         .scaleOrdinal()
         .domain(["yesCount", "noCount"])
-        .range(["Green", "Red"]);
-
-      console.log("Finaaalll data", final_data);
+        .range(["Red", "Green"]);
 
       var sel = d3
         .select("g")
@@ -255,21 +238,18 @@ export default function ImpactSpider(props) {
               `Not Declared: ${d.data.noCount}` +
               "</br>" +
               `Total Occurrences: ${d.data.yesCount + d.data.noCount}`
-            )
-            .attr("font-size", "10px");
+            );
         })
         .on("mouseout", function () {
           d3.select(this).attr("r", 8);
           tooltip.style("opacity", 0);
         });
 
-
-
       const legend = svg
         .append("g")
         .attr(
           "transform",
-          "translate(" + cfg.w / 1.5 + "," + (cfg.margin.top + 10) + ")"
+          "translate(" + cfg.w * 1.2 + "," + (cfg.h / 2.3) + ")"
         )
         .selectAll("g")
         .data(["Emergency was declared", "Emergency was not declared"])
@@ -280,7 +260,7 @@ export default function ImpactSpider(props) {
       legend
         .append("circle")
         .attr("cx", 0)
-        .attr("cy", (d, i) => 10 + i * 20)
+        .attr("cy", (d, i) => 20 + i * 50)
         .attr("r", 6)
         .style("fill", (d) =>
           d === "Emergency was declared" ? "red" : "green"
@@ -289,10 +269,14 @@ export default function ImpactSpider(props) {
       legend
         .append("text")
         .attr("x", 13)
-        .attr("y", (d, i) => 10 + i * 20)
+        .attr("y", (d, i) => 20 + i * 50)
         .attr("dy", ".35em")
         .text((d) => d)
-        .style("font-size", "15px");
+        .style("fill", d => {
+          return d === "Emergency was declared" ? "red" : "green"
+        })
+
+        .style("font-size", "25px");
 
       // Add x-axis label
       svg
@@ -300,6 +284,7 @@ export default function ImpactSpider(props) {
         .attr("x", cfg.w / 2 + cfg.margin.left)
         .attr("y", cfg.h + 40)
         .attr("text-anchor", "middle")
+        .style("font-size", "25px")
         .text("Magnitude");
 
       // Add y-axis label
@@ -309,17 +294,19 @@ export default function ImpactSpider(props) {
         .attr("x", 0 - cfg.h / 2)
         .attr("y", cfg.margin.left - 60)
         .attr("text-anchor", "middle")
-        .text("Number of occurrences");
+        .style("font-size", "25px")
+        .text("Number of occurrences")
+        ;
 
       svg
         .selectAll(".domain")
         .style("stroke", "black")
-        .style("stroke-width", "1px");
+        .style("stroke-width", "2px");
 
       svg
         .selectAll(".tick line")
         .style("stroke", "black")
-        .style("stroke-width", "0.8px");
+        .style("stroke-width", "2px");
 
       svg
         .selectAll(".tick text")
@@ -355,7 +342,7 @@ export default function ImpactSpider(props) {
 
 
       </div>
-      <div>
+      <div className="units">
         Units of Magnitude is : <strong>{UnitArray[type]}</strong>
         <br />
         <strong>
