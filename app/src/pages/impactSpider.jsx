@@ -651,10 +651,10 @@ export default function ImpactSpider(props) {
             const angleSlice = Math.PI * 2 / 7;
             var p = 0;
             if (cfg.w < 1300) {
-                p = 4.8 * (cfg.w/1300)
+                p = 4.5 * (cfg.w/1300)
             }
             else {
-                p = 4.8
+                p = 4.5
             }
             svg.style('position', 'absolute')
                 .style('top', rScale(maxValue * p) * Math.sin(angleSlice * type - Math.PI / 2 + Math.PI / 45))
