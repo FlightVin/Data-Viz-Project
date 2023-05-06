@@ -112,7 +112,10 @@ To provide more detail on how each axis varies with magnitude, the visualisation
                     </div>
             </div>
             
-            <iframe src="/impact-spider" className='w-full h-screen mt-10'
+            <iframe src="/impact-spider" className='w-full mt-10'
+                style={{
+                  height:'1550px'
+                }}
               data-aos="zoom-in" data-aos-delay="200"></iframe>
           </div>
 

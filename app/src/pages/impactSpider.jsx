@@ -527,8 +527,8 @@ export default function ImpactSpider(props) {
         const Chart1 = (dataKey, color, type) => {
 
             const margin = { top: 20, right: 200, bottom: 30, left: 60 };
-            const width = 500;
-            const height = 500;
+            const width = 300;
+            const height = 300;
 
             const svg = d3.select(".barChart1").append("svg")
                 .attr('width', width + margin.left + margin.right)
@@ -570,15 +570,14 @@ export default function ImpactSpider(props) {
                 .attr("font-size", "24px")
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
-                .text("Magnitude Parts(defined in legend)");
 
             svg.append('g')
                 .call(d3.axisLeft(y))
                 .append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 60)
-                .attr("font-size", "23px")
-                .attr("x", -height / 5)
+                .attr("y", 30)
+                .attr("font-size", "18px")
+                .attr("x", -height / 5 + 40)
                 .attr("dy", "-4em")
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
@@ -621,7 +620,7 @@ export default function ImpactSpider(props) {
         const Chart = (dataKey, color, type) => {
             const formatter = d3.format(",.0f")
             const margin = { top: 100, right: 100, bottom: 100, left: 100 };
-            const width = 40;
+            const width = 30;
             const height = 40;
 
             var cfg = {
@@ -679,17 +678,6 @@ export default function ImpactSpider(props) {
             const y = d3.scaleLog()
                 .range([height, 0])
                 .domain([1, d3.max(bardata, d => d[dataKey])]);
-
-            svg.append('g')
-                .attr('transform', `translate(0, ${height})`)
-                .call(d3.axisBottom(x))
-                .append("text")
-                .attr("y", 21)
-                .attr("x", width / 1.2)
-                .attr("text-anchor", "end")
-                .attr("fill", "black")
-                .attr("font-size", width / 10 + "px")
-                .text("Magnitude Parts(defined in legend)");
 
             svg.append('g')
                 .call(d3.axisLeft(y))
@@ -805,7 +793,9 @@ export default function ImpactSpider(props) {
 
             </div>
             <div className='units'>
+            <p className="text-2xl text-slate-700 hover:text-gray-500 mb-24 text-justify">
                 Units of Magnitude is : {UnitArray[type]}
+            </p>
             </div>
             <div className="chart-container">
                 <div className='radarChart'></div>
