@@ -473,8 +473,8 @@ export default function ImpactSpider(props) {
                 .data(legendData)
                 .enter()
                 .append("rect")
-                .attr("x", 0)
-                .attr("y", function (d, i) { return i * 40; })
+                .attr("x", -100)
+                .attr("y", function (d, i) { return i * 25; })
                 .attr("width", 15)
                 .attr("height", 15)
                 .style("fill", function (d) { return d.color; });
@@ -484,8 +484,8 @@ export default function ImpactSpider(props) {
                 .enter()
                 .append("text")
                 .attr("font-size", "24px")
-                .attr("x", 30)
-                .attr("y", function (d, i) { return i * 40 + 18; })
+                .attr("x", -70)
+                .attr("y", function (d, i) { return i * 25 + 18; })
                 .text(function (d) { return d.name; });
 
             /////////////////////////////////////////////////////////
