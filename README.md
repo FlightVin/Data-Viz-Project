@@ -2,8 +2,9 @@
 
 ## Data from https://public.emdat.be/data
 
-```
-Dataset credits:
+## Deployed at 
+
+```md
 For folders in archive/
 
 The GDIS data descriptor
