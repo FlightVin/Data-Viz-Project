@@ -106,7 +106,7 @@ export default function GeoDistro(props) {
 
     const countries = topojson.feature(worldMap, worldMap.objects.countries);
 
-    const colors = ["green", "yellow", "orange", "red"];
+    const colors = ["green", "#FDDA0D", "orange", "red"];
     const eventsArray = [
       "Not Disaster Prone",
       "Less Prone to Disasters",
@@ -116,17 +116,19 @@ export default function GeoDistro(props) {
 
     for (var i = 0; i < colors.length; i++) {
       svg
-        .append("rect")
-        .attr("x", "900")
-        .attr("y", (2 + 50 * i).toString())
-        .attr("width", "20")
-        .attr("height", "20")
+        .append("circle")
+        .attr("cx", "900")
+        .attr("cy", (15 + 50 * i).toString())
+        .attr("r", "10")
+        // .attr("width", "20")
+        // .attr("height", "20")
         .attr("fill", colors[i]);
 
       svg
         .append("text")
         .attr("x", "930")
         .attr("y", (2 + 50 * i + 16).toString())
+        .style("fill", colors[i])
         .text(eventsArray[i]);
     }
 
@@ -161,7 +163,7 @@ export default function GeoDistro(props) {
           disasterDataMap.get(countryName) / (value1[1] - value1[0] + 1) <
           4
         ) {
-          return "yellow";
+          return "#FDDA0D";
         } else if (
           disasterDataMap.get(countryName) / (value1[1] - value1[0] + 1) <
           6
