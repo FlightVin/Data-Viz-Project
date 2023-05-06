@@ -6,10 +6,11 @@
 
 .select {
     background-color: lightblue;
-    color: white;
+    color: rgb(0, 0, 0);
     border: 2px solid blue;
-    padding: 0.5em;
-    font-size: 1em;
+    padding: 1em;
+    margin: 0.5em;
+    font-size: 1.5em;
 }
 
 .select:focus {
@@ -17,16 +18,23 @@
     border-color: darkblue;
 }
 
-
-.chart-container {
-    width: 800px;
-    height: 800px;
-    border: 1px solid #ccc;
-    padding: 20px;
+.units {
+    font-size: 1.5em;
+    margin: 1em;
 }
 
 .radarChart {
     width: 100%;
     height: 100%;
-    background-color: #eee;
+
+}
+
+.chart-container {
+    position: relative;
+}
+
+.barChart {
+    position: absolute;
+    top: 0%;
+    left: 0%;
 }
