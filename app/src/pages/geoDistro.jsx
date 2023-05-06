@@ -14,7 +14,7 @@ export default function GeoDistro(props) {
   const [disasterData, setDisasterData] = React.useState(null);
   const [countriesList, setCountriesList] = React.useState([]);
   const [disasterDataMap, setDisasterDataMap] = React.useState(new Map());
-  const [type, SetType] = React.useState(null);
+  const [type, SetType] = React.useState("All");
   const [typearray, SetTypeArray] = React.useState([
     "All",
     "Earthquake",
