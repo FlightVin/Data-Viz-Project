@@ -274,8 +274,8 @@ export default function ImpactSpider(props) {
             axis.append("line")
                 .attr("x1", 0)
                 .attr("y1", 0)
-                .attr("x2", function (d, i) { return rScale(maxValue * 1.1) * Math.cos(angleSlice * i - Math.PI / 2); })
-                .attr("y2", function (d, i) { return rScale(maxValue * 1.1) * Math.sin(angleSlice * i - Math.PI / 2); })
+                .attr("x2", function (d, i) { return (rScale(maxValue * 1.1) - 70) * Math.cos(angleSlice * i - Math.PI / 2); })
+                .attr("y2", function (d, i) { return (rScale(maxValue * 1.1) - 70) * Math.sin(angleSlice * i - Math.PI / 2); })
                 .attr("class", "line")
                 .style("stroke", "white")
                 .style("stroke-width", "2px");
@@ -283,14 +283,13 @@ export default function ImpactSpider(props) {
             //Append the labels at each axis
             axis.append("text")
                 .attr("class", "legend")
-                .style("font-size", "11px")
+                .style("font-size", "20px")
                 .attr("text-anchor", "middle")
                 .attr("dy", "0.35em")
-                .attr("x", function (d, i) { return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice * i - Math.PI / 2); })
-                .attr("y", function (d, i) { return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice * i - Math.PI / 2); })
+                .attr("x", function (d, i) { return (rScale(maxValue * cfg.labelFactor) - 80) * Math.cos(angleSlice * i - Math.PI / 2); })
+                .attr("y", function (d, i) { return (rScale(maxValue * cfg.labelFactor) - 80) * Math.sin(angleSlice * i - Math.PI / 2); })
                 .text(function (d) { return d })
                 .call(wrap, cfg.wrapWidth);
-
 
             //// lines
             /////////////////////////////////////////////////////////
@@ -452,13 +451,15 @@ export default function ImpactSpider(props) {
             //Set up the small tooltip for when you hover over a circle
             var tooltip = g.append("text")
                 .attr("class", "tooltip")
-                .style("opacity", 0);
+                .style("opacity", 0)
+                .style("font-size", "20px")
+                ;
 
             //////////////////////////////////////////////////////////
             /////////////////// Legend ///////////////////////////////
             /////////////////////////////////////////////////////////
             var legendData = [
-                { name: "Magnitude", color: "#eee" },
+                { name: "Magnitude", color: "white" },
                 { name: `${magParts[0][3]} - ${magParts[0][4]} `, color: "#EDC951" },
                 { name: `${magParts[0][2]} - ${magParts[0][3]}`, color: "#CC333F" },
                 { name: `${magParts[0][1]} - ${magParts[0][2]}`, color: "#00A0B0" },
@@ -473,17 +474,18 @@ export default function ImpactSpider(props) {
                 .enter()
                 .append("rect")
                 .attr("x", 0)
-                .attr("y", function (d, i) { return i * 20; })
-                .attr("width", 10)
-                .attr("height", 10)
+                .attr("y", function (d, i) { return i * 40; })
+                .attr("width", 15)
+                .attr("height", 15)
                 .style("fill", function (d) { return d.color; });
 
             var legendText = legend.selectAll("text")
                 .data(legendData)
                 .enter()
                 .append("text")
+                .attr("font-size", "30px")
                 .attr("x", 20)
-                .attr("y", function (d, i) { return i * 20 + 9; })
+                .attr("y", function (d, i) { return i * 40 + 18; })
                 .text(function (d) { return d.name; });
 
             /////////////////////////////////////////////////////////
@@ -525,8 +527,8 @@ export default function ImpactSpider(props) {
         const Chart1 = (dataKey, color, type) => {
 
             const margin = { top: 20, right: 200, bottom: 30, left: 60 };
-            const width = 300;
-            const height = 300;
+            const width = 700;
+            const height = 700;
 
             const svg = d3.select(".barChart1").append("svg")
                 .attr('width', width + margin.left + margin.right)
@@ -545,9 +547,11 @@ export default function ImpactSpider(props) {
                 .style("z-index", "10")
                 .style("background-color", "white")
                 .style("border", "solid")
+                .style("font-size", "30px")
                 .style("border-width", "2px")
                 .style("border-radius", "5px")
                 .style("padding", "5px");
+
             const x = d3.scaleBand()
                 .range([0, width])
                 .padding(0.1)
@@ -563,7 +567,7 @@ export default function ImpactSpider(props) {
                 .append("text")
                 .attr("y", 25)
                 .attr("x", width / 1.25)
-                .attr("font-size", "14px")
+                .attr("font-size", "25px")
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
                 .text("Magnitude Parts(defined in legend)");
@@ -572,8 +576,8 @@ export default function ImpactSpider(props) {
                 .call(d3.axisLeft(y))
                 .append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 20)
-                .attr("font-size", "14px")
+                .attr("y",60)
+                .attr("font-size", "25px")
                 .attr("x", -height / 2.5)
                 .attr("dy", "-4em")
                 .attr("text-anchor", "end")
@@ -621,9 +625,15 @@ export default function ImpactSpider(props) {
 
 
         const Chart = (dataKey, color, type) => {
-            const margin = { top: 20, right: 200, bottom: 30, left: 60 };
-            const width = 20;
-            const height = 20;
+            const margin = { top: 100, right: 100, bottom: 100, left: 100 };
+            const width = 40;
+            const height = 40;
+
+            var cfg = {
+                w: Math.min(1500, window.innerWidth - 10) - margin.left - margin.right,
+                h: Math.min(Math.min(1500, window.innerWidth - 10) - margin.left - margin.right, window.innerHeight - margin.top - margin.bottom - 20),
+                margin: { top: 100, right: 100, bottom: 100, left: 100 }
+            }
             //If the supplied maxValue is smaller than the actual one, replace by the max in the data
             var maxValue = d3.max(disasterdata, function (i) { return d3.max(i.map(function (o) { return o.value; })) });
 
@@ -635,20 +645,27 @@ export default function ImpactSpider(props) {
             const svg = d3.select(".barChart").append("svg")
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
+                .attr('transform', `translate(${(cfg.w / 2 + cfg.margin.left)}, ${(cfg.h / 2 + cfg.margin.top)})`)
+
 
             const angleSlice = Math.PI * 2 / 7;
-
-
+            var p = 0;
+            if (cfg.w < 1300) {
+                p = 4.8 * (cfg.w/1300)
+            }
+            else {
+                p = 4.8
+            }
             svg.style('position', 'absolute')
-                .style('top', Math.min(470, window.innerWidth - 10) + rScale(maxValue * 2.2) * Math.sin(angleSlice * type - Math.PI / 2 + Math.PI / 45))
-                .style('left', Math.min(820, window.innerWidth - 10) + rScale(maxValue * 2.2) * Math.cos(angleSlice * type - Math.PI / 2 + Math.PI / 45))
+                .style('top', rScale(maxValue * p) * Math.sin(angleSlice * type - Math.PI / 2 + Math.PI / 45))
+                .style('left', rScale(maxValue * p) * Math.cos(angleSlice * type - Math.PI / 2 + Math.PI / 45))
                 .append('g')
-                .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
 
             var tooltip = d3
                 .select(".example-container")
                 .append("div")
+
                 .style("opacity", 0)
                 .style("position", "absolute")
                 .style("z-index", "10")
@@ -731,7 +748,7 @@ export default function ImpactSpider(props) {
 
         if (disasterdata && bardata && !graph) {
             var margin = { top: 100, right: 100, bottom: 100, left: 100 },
-                width = Math.min(800, window.innerWidth - 10) - margin.left - margin.right,
+                width = Math.min(1500, window.innerWidth - 10) - margin.left - margin.right,
                 height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
 
             // console.log(disasterdata);
@@ -792,21 +809,20 @@ export default function ImpactSpider(props) {
                 </div>
 
             </div>
-            <div>
+            <div className='units'>
                 Units of Magnitude is : {UnitArray[type]}
             </div>
             <div className="chart-container">
                 <div className='radarChart'></div>
+                <div className='barChart'></div>
 
             </div>
             <br />
             <br />
-            <div >
-                Radar Chart was used here because it a multivariate data (though the chart is risky to use)
-            </div>
+
 
             <div>
-                <div className='barChart'></div>
+
                 <div className='barChart1'></div>
             </div>
 
