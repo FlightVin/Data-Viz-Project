@@ -427,12 +427,11 @@ export default function DecadalDeaths(props) {
 
     for (var i = 0; i < calamities.length; i++) {
       svg
-        .append("rect")
-        .attr("x", "1100")
+        .append("circle")
+        .attr("cx", "1100")
         .attr("id", `labelrect${i}`)
-        .attr("y", (2 + 50 * i).toString())
-        .attr("width", "20")
-        .attr("height", "20")
+        .attr("cy", (13 + 50 * i).toString())
+        .attr("r", "10")
         .attr("fill", colorScale(calamities[i]))
         .on("mouseover", onMouseOver2)
         .on("mouseout", function (e) {
@@ -450,6 +449,7 @@ export default function DecadalDeaths(props) {
         .attr("x", "1130")
         .attr("y", (2 + 50 * i + 16).toString())
         .attr("id", `labelrect${i}`)
+        .attr("fill", colorScale(calamities[i]))
         .text(calamities[i])
         .on("mouseover", onMouseOver2)
         .on("mouseout", function (e) {
