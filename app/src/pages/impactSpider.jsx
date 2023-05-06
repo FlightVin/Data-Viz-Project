@@ -473,7 +473,7 @@ export default function ImpactSpider(props) {
                 .data(legendData)
                 .enter()
                 .append("rect")
-                .attr("x", 0)
+                .attr("x", -90)
                 .attr("y", function (d, i) { return i * 40; })
                 .attr("width", 15)
                 .attr("height", 15)
@@ -483,8 +483,8 @@ export default function ImpactSpider(props) {
                 .data(legendData)
                 .enter()
                 .append("text")
-                .attr("font-size", "30px")
-                .attr("x", 20)
+                .attr("font-size", "24px")
+                .attr("x", -60)
                 .attr("y", function (d, i) { return i * 40 + 18; })
                 .text(function (d) { return d.name; });
 
@@ -527,8 +527,8 @@ export default function ImpactSpider(props) {
         const Chart1 = (dataKey, color, type) => {
 
             const margin = { top: 20, right: 200, bottom: 30, left: 60 };
-            const width = 700;
-            const height = 700;
+            const width = 500;
+            const height = 500;
 
             const svg = d3.select(".barChart1").append("svg")
                 .attr('width', width + margin.left + margin.right)
@@ -565,9 +565,9 @@ export default function ImpactSpider(props) {
                 .attr('transform', `translate(0, ${height})`)
                 .call(d3.axisBottom(x))
                 .append("text")
-                .attr("y", 25)
+                .attr("y", 30)
                 .attr("x", width / 1.25)
-                .attr("font-size", "25px")
+                .attr("font-size", "24px")
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
                 .text("Magnitude Parts(defined in legend)");
@@ -576,9 +576,9 @@ export default function ImpactSpider(props) {
                 .call(d3.axisLeft(y))
                 .append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y",60)
-                .attr("font-size", "25px")
-                .attr("x", -height / 2.5)
+                .attr("y", 70)
+                .attr("font-size", "23px")
+                .attr("x", -height / 3)
                 .attr("dy", "-4em")
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
@@ -603,7 +603,7 @@ export default function ImpactSpider(props) {
                         .style("left", event.pageX + 20 + "px")
                         .style("top", event.pageY + "px")
                         .html(
-                            `<div>${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}: ${d[dataKey]}</div>`
+                            `<div>${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}: ${formatter(d[dataKey])}</div>`
                         )
                         .attr("font-size", "10px");
                 })
@@ -614,24 +614,19 @@ export default function ImpactSpider(props) {
                 .attr('width', x.bandwidth())
                 .attr('height', d => height - y(d[dataKey]))
 
-            var legendData = [
-                { name: `${magParts[0][3]} - ${magParts[0][4]} `, color: "#EDC951" },
-                { name: `${magParts[0][2]} - ${magParts[0][3]}`, color: "#CC333F" },
-                { name: `${magParts[0][1]} - ${magParts[0][2]}`, color: "#00A0B0" },
-                { name: `0 - ${magParts[0][1]}`, color: "#8B008B" }
-            ];
 
         }
 
 
         const Chart = (dataKey, color, type) => {
+            const formatter = d3.format(",.0f")
             const margin = { top: 100, right: 100, bottom: 100, left: 100 };
             const width = 40;
             const height = 40;
 
             var cfg = {
-                w: Math.min(1500, window.innerWidth - 10) - margin.left - margin.right,
-                h: Math.min(Math.min(1500, window.innerWidth - 10) - margin.left - margin.right, window.innerHeight - margin.top - margin.bottom - 20),
+                w: Math.min(1200, window.innerWidth - 10) - margin.left - margin.right,
+                h: Math.min(Math.min(1200, window.innerWidth - 10) - margin.left - margin.right, window.innerHeight - margin.top - margin.bottom - 20),
                 margin: { top: 100, right: 100, bottom: 100, left: 100 }
             }
             //If the supplied maxValue is smaller than the actual one, replace by the max in the data
@@ -650,15 +645,15 @@ export default function ImpactSpider(props) {
 
             const angleSlice = Math.PI * 2 / 7;
             var p = 0;
-            if (cfg.w < 1300) {
-                p = 4.5 * (cfg.w/1300)
+            if (cfg.w < 1000) {
+                p = 4.0 * (cfg.w / 1100)
             }
             else {
-                p = 4.5
+                p = 4.0
             }
             svg.style('position', 'absolute')
-                .style('top', rScale(maxValue * p) * Math.sin(angleSlice * type - Math.PI / 2 + Math.PI / 45))
-                .style('left', rScale(maxValue * p) * Math.cos(angleSlice * type - Math.PI / 2 + Math.PI / 45))
+                .style('top', rScale(maxValue * p) * Math.sin(angleSlice * type - Math.PI / 2 + Math.PI / 50))
+                .style('left', rScale(maxValue * p) * Math.cos(angleSlice * type - Math.PI / 2 + Math.PI / 50))
                 .append('g')
 
 
@@ -727,7 +722,7 @@ export default function ImpactSpider(props) {
                         .style("left", event.pageX + 20 + "px")
                         .style("top", event.pageY + "px")
                         .html(
-                            `<div>${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}: ${d[dataKey]}</div>`
+                            `<div>${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}: ${formatter(d[dataKey])}</div>`
                         )
                         .attr("font-size", "10px");
                 })
@@ -748,7 +743,7 @@ export default function ImpactSpider(props) {
 
         if (disasterdata && bardata && !graph) {
             var margin = { top: 100, right: 100, bottom: 100, left: 100 },
-                width = Math.min(1500, window.innerWidth - 10) - margin.left - margin.right,
+                width = Math.min(1200, window.innerWidth - 10) - margin.left - margin.right,
                 height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
 
             // console.log(disasterdata);
