@@ -1,4 +1,18 @@
-# Data-Viz-Project
+# Data Vizualization Project
+
+## Deployment at https://disaster-viz.netlify.app/landing-page
+
+## Team members
+
+1. Vineeth Bhat - _Zoomable sunburst, hierarchical tree, circular packing, sankey chart, integration of visualizations_
+2. Anush Anand - _Spider chart with integrated bar charts, emergency declaration bar chart_
+3. Mitansh Kayathwal - _Mercator map, Decadal stacked bar chart_ 
+
+## Technologies used
+
+1. React
+2. d3.js
+3. AOS library
 
 ## Data from https://public.emdat.be/data
 
