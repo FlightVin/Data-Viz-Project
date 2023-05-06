@@ -286,8 +286,8 @@ export default function ImpactSpider(props) {
                 .style("font-size", "20px")
                 .attr("text-anchor", "middle")
                 .attr("dy", "0.35em")
-                .attr("x", function (d, i) { return (rScale(maxValue * cfg.labelFactor) - 80) * Math.cos(angleSlice * i - Math.PI / 2); })
-                .attr("y", function (d, i) { return (rScale(maxValue * cfg.labelFactor) - 80) * Math.sin(angleSlice * i - Math.PI / 2); })
+                .attr("x", function (d, i) { return (rScale(maxValue * cfg.labelFactor) - 30) * Math.cos(angleSlice * i - Math.PI / 2); })
+                .attr("y", function (d, i) { return (rScale(maxValue * cfg.labelFactor) - 30) * Math.sin(angleSlice * i - Math.PI / 2); })
                 .text(function (d) { return d })
                 .call(wrap, cfg.wrapWidth);
 
@@ -473,7 +473,7 @@ export default function ImpactSpider(props) {
                 .data(legendData)
                 .enter()
                 .append("rect")
-                .attr("x", -90)
+                .attr("x", 0)
                 .attr("y", function (d, i) { return i * 40; })
                 .attr("width", 15)
                 .attr("height", 15)
@@ -484,7 +484,7 @@ export default function ImpactSpider(props) {
                 .enter()
                 .append("text")
                 .attr("font-size", "24px")
-                .attr("x", -60)
+                .attr("x", 30)
                 .attr("y", function (d, i) { return i * 40 + 18; })
                 .text(function (d) { return d.name; });
 
@@ -565,7 +565,7 @@ export default function ImpactSpider(props) {
                 .attr('transform', `translate(0, ${height})`)
                 .call(d3.axisBottom(x))
                 .append("text")
-                .attr("y", 30)
+                .attr("y", 25)
                 .attr("x", width / 1.25)
                 .attr("font-size", "24px")
                 .attr("text-anchor", "end")
@@ -576,13 +576,13 @@ export default function ImpactSpider(props) {
                 .call(d3.axisLeft(y))
                 .append("text")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 70)
+                .attr("y", 60)
                 .attr("font-size", "23px")
-                .attr("x", -height / 3)
+                .attr("x", -height / 5)
                 .attr("dy", "-4em")
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
-                .text(dataKey.charAt(0).toUpperCase() + dataKey.slice(1));
+                .text(dataKey.charAt(0).toUpperCase() + dataKey.slice(1) + " (log scale)");
 
             svg.selectAll('.bar')
                 .data(bardata)
@@ -625,8 +625,8 @@ export default function ImpactSpider(props) {
             const height = 40;
 
             var cfg = {
-                w: Math.min(1200, window.innerWidth - 10) - margin.left - margin.right,
-                h: Math.min(Math.min(1200, window.innerWidth - 10) - margin.left - margin.right, window.innerHeight - margin.top - margin.bottom - 20),
+                w: Math.min(1000, window.innerWidth - 10) - margin.left - margin.right,
+                h: Math.min(Math.min(1000, window.innerWidth - 10) - margin.left - margin.right, window.innerHeight - margin.top - margin.bottom - 20),
                 margin: { top: 100, right: 100, bottom: 100, left: 100 }
             }
             //If the supplied maxValue is smaller than the actual one, replace by the max in the data
@@ -645,11 +645,11 @@ export default function ImpactSpider(props) {
 
             const angleSlice = Math.PI * 2 / 7;
             var p = 0;
-            if (cfg.w < 1000) {
-                p = 4.0 * (cfg.w / 1100)
+            if (cfg.w < 800) {
+                p = 3.52* (cfg.w / 800)
             }
             else {
-                p = 4.0
+                p = 3.52
             }
             svg.style('position', 'absolute')
                 .style('top', rScale(maxValue * p) * Math.sin(angleSlice * type - Math.PI / 2 + Math.PI / 50))
@@ -684,7 +684,7 @@ export default function ImpactSpider(props) {
                 .attr('transform', `translate(0, ${height})`)
                 .call(d3.axisBottom(x))
                 .append("text")
-                .attr("y", 27)
+                .attr("y", 21)
                 .attr("x", width / 1.2)
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
@@ -701,7 +701,7 @@ export default function ImpactSpider(props) {
                 .attr("text-anchor", "end")
                 .attr("fill", "black")
                 .attr("font-size", width / 10 + "px")
-                .text(dataKey.charAt(0).toUpperCase() + dataKey.slice(1));
+                .text(dataKey.charAt(0).toUpperCase() + dataKey.slice(1) );
 
             svg.selectAll('.bar')
                 .data(bardata)
@@ -743,7 +743,7 @@ export default function ImpactSpider(props) {
 
         if (disasterdata && bardata && !graph) {
             var margin = { top: 100, right: 100, bottom: 100, left: 100 },
-                width = Math.min(1200, window.innerWidth - 10) - margin.left - margin.right,
+                width = Math.min(1000, window.innerWidth - 10) - margin.left - margin.right,
                 height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
 
             // console.log(disasterdata);
