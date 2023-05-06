@@ -72,7 +72,10 @@ You can interact with the Mercator map by selecting a time period using a 2-thum
                         Decadal Fatalities due to disasters
                     </p>
             </div>
-            <iframe src="/decadal-deaths" className='w-full h-screen'
+            <iframe src="/decadal-deaths" className='w-full'
+              style={{
+                height:'1400px'
+              }}
               data-aos="zoom-in" data-aos-delay="200"></iframe>
             <div className="w-full flex items-center justify-center flex-col mt-10">
             <div className='mr-48 ml-48'>
